@@ -1,0 +1,13 @@
+Experiment Date and Time: 17-Aug-2022 16:23:50
+USING THE FOLLOWING VIEW(S): Axial
+EXPERIMENT TYPE: lumen_only 
+FEATURE FAMILY: 3D Texture 
+Trained on 70 patients 
+Tested on 24 patients 
+View: Axial
+ROIs Analyzed: lumen_only
+Selection Method: mrmr
+Classifier: RANDOMFOREST
+Number of Top Features: 5
+Number of Folds: 5
+

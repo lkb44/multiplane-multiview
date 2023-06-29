@@ -1,0 +1,12 @@
+Experiment Date and Time: 09-Aug-2022 10:46:15
+USING THE FOLLOWING VIEW(S): Coronal
+EXPERIMENT TYPE: rw_fat 
+Trained on 70 patients 
+Tested on 24 patients 
+View: Coronal
+ROIs Analyzed: rw_fat
+Selection Method: wilcoxon
+Classifier: QDA
+Number of Top Features: 5
+Number of Folds: 5
+

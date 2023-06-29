@@ -1,0 +1,13 @@
+Experiment Date and Time: 17-Feb-2023 13:13:06
+USING THE FOLLOWING VIEW(S): Coronal
+EXPERIMENT TYPE: tumor_only 
+FEATURE FAMILY: 3D Texture 
+Trained on 57 patients 
+Tested on 14 patients 
+View: Coronal
+ROIs Analyzed: tumor_only
+Selection Method: wilcoxon
+Classifier: QDA
+Number of Top Features: 7
+Number of Folds: 5
+

@@ -1,0 +1,12 @@
+Experiment Date and Time: 18-Feb-2023 18:25:33
+USING THE FOLLOWING VIEW(S): Coronal Axial
+EXPERIMENT TYPE: singleFeature 
+FEATURE FAMILY: 2D Texture Shape 
+Trained on 57 patients 
+Tested on 14 patients 
+View: CoronalAxial
+Selection Method: wilcoxon
+Classifier: QDA
+Number of Top Features: 1
+Number of Folds: 5
+

@@ -1,0 +1,13 @@
+Experiment Date and Time: 14-Feb-2023 16:49:21
+USING THE FOLLOWING VIEW(S): Coronal
+EXPERIMENT TYPE: tumor_only 
+FEATURE FAMILY: 3D Texture 
+Trained on 57 patients 
+Tested on 14 patients 
+View: Coronal
+ROIs Analyzed: tumor_only
+Selection Method: mrmr
+Classifier: QDA
+Number of Top Features: 5
+Number of Folds: 5
+

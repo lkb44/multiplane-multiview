@@ -1,0 +1,12 @@
+Experiment Date and Time: 15-Aug-2022 14:07:44
+USING THE FOLLOWING VIEW(S): Axial Coronal
+EXPERIMENT TYPE: fat_only 
+Trained on 70 patients 
+Tested on 24 patients 
+View: AxialCoronal
+ROIs Analyzed: fat_only
+Selection Method: mrmr
+Classifier: RANDOMFOREST
+Number of Top Features: 5
+Number of Folds: 5
+

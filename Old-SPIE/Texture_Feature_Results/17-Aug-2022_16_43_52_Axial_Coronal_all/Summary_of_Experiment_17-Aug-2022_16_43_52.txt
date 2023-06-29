@@ -1,0 +1,13 @@
+Experiment Date and Time: 17-Aug-2022 16:43:54
+USING THE FOLLOWING VIEW(S): Axial Coronal
+EXPERIMENT TYPE: all 
+FEATURE FAMILY: 3D Texture 
+Trained on 70 patients 
+Tested on 24 patients 
+View: AxialCoronal
+ROIs Analyzed: all
+Selection Method: mrmr
+Classifier: RANDOMFOREST
+Number of Top Features: 5
+Number of Folds: 5
+

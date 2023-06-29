@@ -1,0 +1,12 @@
+Experiment Date and Time: 09-Aug-2022 10:23:43
+USING THE FOLLOWING VIEW(S): Coronal
+EXPERIMENT TYPE: rw_only 
+Trained on 70 patients 
+Tested on 24 patients 
+View: Coronal
+ROIs Analyzed: rw_only
+Selection Method: wilcoxon
+Classifier: QDA
+Number of Top Features: 5
+Number of Folds: 5
+

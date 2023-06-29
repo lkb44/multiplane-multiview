@@ -1,0 +1,13 @@
+Experiment Date and Time: 13-Feb-2023 22:34:32
+USING THE FOLLOWING VIEW(S): Axial
+EXPERIMENT TYPE: proxfat_only 
+FEATURE FAMILY: 3D Shape 
+Trained on 57 patients 
+Tested on 14 patients 
+View: Axial
+ROIs Analyzed: proxfat_only
+Selection Method: mrmr
+Classifier: RANDOMFOREST
+Number of Top Features: 5
+Number of Folds: 5
+

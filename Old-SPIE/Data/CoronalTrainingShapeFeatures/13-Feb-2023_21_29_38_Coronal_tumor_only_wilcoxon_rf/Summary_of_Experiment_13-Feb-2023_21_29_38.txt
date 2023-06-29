@@ -1,0 +1,13 @@
+Experiment Date and Time: 13-Feb-2023 21:29:39
+USING THE FOLLOWING VIEW(S): Coronal
+EXPERIMENT TYPE: tumor_only 
+FEATURE FAMILY: 3D Shape 
+Trained on 57 patients 
+Tested on 14 patients 
+View: Coronal
+ROIs Analyzed: tumor_only
+Selection Method: wilcoxon
+Classifier: RANDOMFOREST
+Number of Top Features: 5
+Number of Folds: 5
+

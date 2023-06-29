@@ -1,0 +1,13 @@
+Experiment Date and Time: 13-Feb-2023 22:12:25
+USING THE FOLLOWING VIEW(S): Axial
+EXPERIMENT TYPE: fat_only 
+FEATURE FAMILY: 3D Shape 
+Trained on 57 patients 
+Tested on 14 patients 
+View: Axial
+ROIs Analyzed: fat_only
+Selection Method: mrmr
+Classifier: QDA
+Number of Top Features: 5
+Number of Folds: 5
+

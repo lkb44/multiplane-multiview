@@ -1,0 +1,28 @@
+Label: 1
+       Volume: 140533
+       Integrated Intensity (sum within label): 2.71054e+07
+       Centroid (normalized by voxel-count): [254.782, 226.625, 14.2666]
+       Weighted Centroid (normalized by sum of intensities): [250.42, 219.254, 14.4293]
+       Axes Length (all axes): [11.2354, 247.698, 384.99]
+       MajorAxisLength: 384.99
+       MinorAxisLength: 11.2354
+       Eccentricity: 0.999574
+       Elongation: 34.2657
+       Orientation (in radians): 1.97347
+       Bounding box: [xmin xmax ymin ymax zmin zmax]:[133, 387, 31, 382, 10, 19]
+       NumberOfPixelsOnBorder (only if label touches border): 0
+       PerimeterOnBorder (only if label touches border): 0
+       PerimeterOnBorderRatio (only if label touches border): 0
+       PrincipalMoments (Eigen values): [68.8602, 374.895, 904.638]
+       PrincipalAxes (Eigen-vectors/Matrix): -0.0403403 -0.962765 0.267314
+-0.918668 0.140954 0.369028
+-0.392966 -0.230686 -0.890147
+
+       Perimeter (surface for 3D): 24344.6
+       Roundness: 0.236854
+       EquivalentSphericalRadius: 21.4209
+       EquivalentSphericalPerimeter (surface): 5766.12
+       EquivalentEllipsoidDiameter: [21.0277, 49.064, 76.2159]
+       Flatness (ratio of first and second moments): 2.3333
+       Elongation Shape Factor (ratio two second moments) 1.5534
+       Tumor Compactness(Volume/Surface area): 5.77265

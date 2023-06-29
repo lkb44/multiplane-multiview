@@ -1,0 +1,12 @@
+Experiment Date and Time: 22-Aug-2022 00:38:11
+USING THE FOLLOWING VIEW(S): Axial Coronal
+EXPERIMENT TYPE: all 
+FEATURE FAMILY: 2D shape texture 
+Trained on 70 patients 
+Tested on 24 patients 
+View: AxialCoronal
+Selection Method: mrmr
+Classifier: QDA
+Number of Top Features: 5
+Number of Folds: 5
+

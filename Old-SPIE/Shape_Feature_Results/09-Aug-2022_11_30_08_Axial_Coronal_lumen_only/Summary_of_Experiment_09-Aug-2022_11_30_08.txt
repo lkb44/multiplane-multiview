@@ -1,0 +1,12 @@
+Experiment Date and Time: 09-Aug-2022 11:30:09
+USING THE FOLLOWING VIEW(S): Axial Coronal
+EXPERIMENT TYPE: lumen_only 
+Trained on 70 patients 
+Tested on 24 patients 
+View: AxialCoronal
+ROIs Analyzed: lumen_only
+Selection Method: wilcoxon
+Classifier: QDA
+Number of Top Features: 5
+Number of Folds: 5
+
