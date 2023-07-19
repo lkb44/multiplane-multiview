@@ -35,7 +35,7 @@ dir_list = os.listdir(directory)
 dir_list = sorted([ d for d in dir_list if "." not in d])
 
 
-slice_tracker = pd.DataFrame(columns = ['Patient', 'Slice_Number', 'Tumor_Size', 'Dilated_Mask_Size', 'Fat_Mask_Size'])
+slice_tracker = pd.DataFrame(columns = ['Patient', 'Slice_Number', 'Tumor_Size', 'Dilated5_Mask_Size', 'Dilated10_Mask_Size', 'Dilated15_Mask_Size', 'Fat_Mask_Size'])
 
 # List of patients without binary masks
 issues = []
@@ -72,9 +72,7 @@ for folder in dir_list:
         height = src_mask_shape[2]
         
         tumor_mask = np.zeros((width, height))
-        lumen_mask = np.zeros((width, height))
         fat_mask = np.zeros((width, height))
-        rectal_wall_mask = np.zeros((len(src_mask), width, height))
         dilated5_mask = np.zeros((width, height))
         dilated10_mask = np.zeros((width, height))
         dilated15_mask = np.zeros((width, height))
@@ -105,9 +103,7 @@ for folder in dir_list:
                     tumor_area_slice = idx
                     
                     tumor_img = np.copy(img)
-                    lumen_img = np.copy(img)
                     fat_img = np.copy(img)
-                    rw_img = np.copy(img)
                     zero_img = np.copy(img)
                     
                     
@@ -121,21 +117,11 @@ for folder in dir_list:
                     dilated15_img = cv2.dilate(tumor_img, dilate15_kernel, iterations = 1)
                     dilated15_img[dilated15_img == 1] = 11
                     
-                    lumen_img[lumen_img != 2] = 0
-                    lumen_img[lumen_img == 2] = 1
-                    lumen_mask[:, :] = lumen_img
                     
                     fat_img[fat_img != 4] = 0
                     fat_img[fat_img == 4] = 1
                     fat_mask[:, :] = fat_img
                     fat_area = np.count_nonzero( fat_img == 1 )
-
-                    rw_img[rw_img == 7] = 1
-                    rw_img[rw_img == 8] = 1
-                    rw_img[rw_img > 1] = 0
-                    rectal_wall_mask[idx, :, :] = rw_img
-
-                    #zero_img[zero_img != 0] = 1
 
                     dilated5_img = img + dilated5_img
                     dilated5_img[dilated5_img != 15] = 0
@@ -159,27 +145,21 @@ for folder in dir_list:
                     
                     print(folder, ": Slice " + str(idx) + " has the largest tumor area of " + str(tumor_area))
         
-        slice_tracker = slice_tracker.append({"Patient" : folder, "Slice_Number" : tumor_area_slice, "Tumor_Size" : tumor_area, "Dilated_Mask_Size" : dilate_area, "Fat_Mask_Size" : fat_area}, ignore_index=True) 
+        slice_tracker = slice_tracker.append({"Patient" : folder, "Slice_Number" : tumor_area_slice, "Tumor_Size" : tumor_area, "Dilated5_Mask_Size" : dilate5_area, "Dilated10_Mask_Size" : dilate10_area, "Dilated15_Mask_Size" : dilate15_area,"Fat_Mask_Size" : fat_area}, ignore_index=True) 
         
         # Check masks
-        #binary_lumen = check_mask(lumen_mask)
-        #if(binary_lumen is False):
-        #    issues.append(mask_file[0] + "_lumen")
-        #    raise ValueError("Lumen mask for " + mask_file[0] + " is NOT binary!" )
-        #binary_tumor = check_mask(tumor_mask)
-        #if(binary_tumor is False):
-        #    issues.append(mask_file[0] + "_tumor")
-        #    raise ValueError("Rectal wall mask for " + mask_file[0] + " is NOT binary!" )
-        #binary_fat = check_mask(fat_mask)
-        #if(binary_fat is False):
-        #    issues.append(mask_file[0] + "_fat")
-        #    raise ValueError("Fat mask for " + mask_file[0] + " is NOT binary!" )
+        binary_tumor = check_mask(tumor_mask)
+        if(binary_tumor is False):
+            issues.append(mask_file[0] + "_tumor")
+            raise ValueError("Rectal wall mask for " + mask_file[0] + " is NOT binary!" )
+        binary_fat = check_mask(fat_mask)
+        if(binary_fat is False):
+            issues.append(mask_file[0] + "_fat")
+            raise ValueError("Fat mask for " + mask_file[0] + " is NOT binary!" )
             
         # convert masks into sitk images
         tumor_mask = sitk.GetImageFromArray(tumor_mask)
-        lumen_mask = sitk.GetImageFromArray(lumen_mask)
         fat_mask = sitk.GetImageFromArray(fat_mask)
-        rectal_wall_mask = sitk.GetImageFromArray(rectal_wall_mask)
         dilated5_mask = sitk.GetImageFromArray(dilated5_mask)
         dilated10_mask = sitk.GetImageFromArray(dilated10_mask)
         dilated15_mask = sitk.GetImageFromArray(dilated15_mask)
@@ -194,20 +174,10 @@ for folder in dir_list:
         output = os.path.join(directory, folder, "masks", out_name)
         write_mha(tumor_mask, spacing, origin, output)
         
-        # Save lumen mask
-        out_name = mask_file[0].replace(".mha","_lumen_ls.mha")
-        output = os.path.join(directory, folder, "masks", out_name)
-        write_mha(lumen_mask, spacing, origin, output)
-        
         # Save fat mask
         out_name = mask_file[0].replace(".mha","_fat_ls.mha")
         output = os.path.join(directory, folder, "masks", out_name)
         write_mha(fat_mask, spacing, origin, output)
-
-        # Save rectal wall mask
-        out_name = mask_file[0].replace(".mha","_rw_ls.mha")
-        output = os.path.join(directory, folder, "masks", out_name)
-        write_mha(rectal_wall_mask, spacing, origin, output)
 
         # Save proximal fat mask 5 pixels
         out_name = mask_file[0].replace(".mha","_proxfat5_ls.mha")
@@ -225,15 +195,12 @@ for folder in dir_list:
         write_mha(dilated15_mask, spacing, origin, output)
         
         # Save scan
-        out_name = volume_name.replace("_pre_cor_resampled_resampled", "_pre_cor_resampled_largest_slice")
+        out_name = volume_name.replace("_pre_cor_resampled_resampled", "_cor_ls.mha")
         output = os.path.join(directory, folder, out_name)
         write_mha(new_vol, spacing, origin, output)
         
     except Exception as e:
         print(e)
         sys.exit(1)
-        
-    
-        # Extract rectal wall, lumen, and fat from each slice
     
 slice_tracker.to_excel("LTS_cor_Problems_Tracker.xlsx", index = False)
