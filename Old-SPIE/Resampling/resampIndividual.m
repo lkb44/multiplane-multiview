@@ -6,16 +6,16 @@ addpath(genpath(pwd))
 addpath(genpath("/Users/leobao/Library/CloudStorage/GoogleDrive-lkb44@case.edu/Shared drives/INVent/tom/Conferences/2022-SPIE/Feature_Selection_Classification_Code/Feature_Classifier/mha"));
 
 problems = [];
-pathIn = '/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/Data/AxialSingle';
+pathIn = '/Users/leobao/Documents/MultiPlanePipeline/Coronal_Raw/';
 
-DirectoryIn= '/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/Data/AxialSingle/RectalCA_*';
-pathOut= '/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/Data/AxialProblems/';
+DirectoryIn= '/Users/leobao/Documents/MultiPlanePipeline/Coronal_Raw/Patient-*';
+pathOut= '/Users/leobao/Documents/MultiPlanePipeline/Patients/';
 
 Imgs = dir(fullfile(DirectoryIn));
 theFilesvol = {Imgs.name};
 
 for k= 1:length(theFilesvol)
-    folderIn = dir(fullfile(pathIn, theFilesvol{k}, 'RectalCA_*'));
+    folderIn = dir(fullfile(pathIn, theFilesvol{k}, 'Patient-*'));
     if size(folderIn,1)==0, continue; end
     P = {folderIn.name};
     

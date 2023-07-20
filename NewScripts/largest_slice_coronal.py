@@ -30,7 +30,7 @@ def check_mask(input_mask):
         print("Mask is binary.")
         return True
 
-directory = "/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/Data/CoronalOutProblems"
+directory = "/Users/leobao/Documents/MultiPlanePipeline/RevisePatients"
 dir_list = os.listdir(directory)
 dir_list = sorted([ d for d in dir_list if "." not in d])
 
@@ -45,7 +45,7 @@ for folder in dir_list:
     # Find mask file
     files = os.listdir(os.path.join(directory, folder))
     mask_file = [f for f in files if "label" in f]
-    volume_name = folder.replace("-","_") + "_pre_cor_resampled_resampled.mha" # Replace with _pre_ax_resampled.mha for UH axial, _pre_cor_resampled for UH cor, and or _cor_resampled.mha for VA
+    volume_name = folder + "_cor.mha" # Replace with _pre_ax_resampled.mha for UH axial, _pre_cor_resampled for UH cor, and or _cor_resampled.mha for VA
     vol_file = os.path.join(directory, folder, volume_name)
     
     # Read in mask file
@@ -113,7 +113,7 @@ for folder in dir_list:
                     dilated5_img = cv2.dilate(tumor_img, dilate5_kernel, iterations = 1)
                     dilated5_img[dilated5_img == 1] = 11
                     dilated10_img = cv2.dilate(tumor_img, dilate10_kernel, iterations = 1)
-                    dilated10_img[dilated5_img == 1] = 11
+                    dilated10_img[dilated10_img == 1] = 11
                     dilated15_img = cv2.dilate(tumor_img, dilate15_kernel, iterations = 1)
                     dilated15_img[dilated15_img == 1] = 11
                     
@@ -151,7 +151,7 @@ for folder in dir_list:
         binary_tumor = check_mask(tumor_mask)
         if(binary_tumor is False):
             issues.append(mask_file[0] + "_tumor")
-            raise ValueError("Rectal wall mask for " + mask_file[0] + " is NOT binary!" )
+            raise ValueError("Tumor mask for " + mask_file[0] + " is NOT binary!" )
         binary_fat = check_mask(fat_mask)
         if(binary_fat is False):
             issues.append(mask_file[0] + "_fat")
@@ -195,7 +195,7 @@ for folder in dir_list:
         write_mha(dilated15_mask, spacing, origin, output)
         
         # Save scan
-        out_name = volume_name.replace("_pre_cor_resampled_resampled", "_cor_ls.mha")
+        out_name = volume_name.replace("_cor.mha", "_cor_ls.mha")
         output = os.path.join(directory, folder, out_name)
         write_mha(new_vol, spacing, origin, output)
         
@@ -203,4 +203,4 @@ for folder in dir_list:
         print(e)
         sys.exit(1)
     
-slice_tracker.to_excel("LTS_cor_Problems_Tracker.xlsx", index = False)
+slice_tracker.to_excel("LTS_cor_Problems_Tracker_rp.xlsx", index = False)

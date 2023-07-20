@@ -2,19 +2,20 @@ clear all; close all; clc;
 
 %% Specify parameters
 view = "Coronal"; % change to 'Axial' or 'Coronal'
-dataset = "TrainingShapeFeatures/"; % change to 'train', 'test', or 'va_test'
-roi = "Proximal_Fat"; % for axail: change to 'lumen', 'tumor', or 'fat.' For coronal: change to 'lumen', 'rw', or 'fat'
+dataset = "TestingShapeFeatures"; % change to 'train', 'test', or 'va_test'
+split = "_TRG_T/";
+roi = "ProxFat10"; % for axail: change to 'lumen', 'tumor', or 'fat.' For coronal: change to 'lumen', 'rw', or 'fat'
 
 %% Specify filepaths
-root_path = "/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/Data/";
+root_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/";
 
-input_path = strcat(root_path, view, dataset, roi, '/'); 
-output_path = strcat(root_path, view, dataset, roi, '/', view, '_',roi, "_2D_shape_features.mat");
+input_path = strcat(root_path, view, dataset, split, roi, '/'); 
+output_path = strcat(root_path, view, dataset, split, roi, '/', view, '_',roi, "_2D_shape_features.mat");
 
 id_matrix_output_path = strcat(root_path, view, dataset);
 
 %% Get patient IDs
-patients = dir(fullfile(input_path, strcat('*UH-RectalCA-*')));
+patients = dir(fullfile(input_path, strcat('*Patient-*')));
 patient_ids = {patients.name};
 
 %% Combine into one feature matrix
