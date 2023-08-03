@@ -7,13 +7,13 @@ addpath(genpath('/Users/leobao/Library/CloudStorage/GoogleDrive-lkb44@case.edu/S
 addpath(genpath('/Users/leobao/Library/CloudStorage/GoogleDrive-lkb44@case.edu/Shared drives/INVent/tom/Conferences/2022-SPIE/Feature_Selection_Classification_Code/Feature_Classifier/mha'));
 
 %% Path to data
-path_data = '/Users/leobao/Documents/MultiPlanePipeline/Data/CoronalTestingLargestSlice_TRG_T/Patient-*';
+path_data = '/Users/leobao/Documents/MultiPlanePipeline/Data/AxialTrainingLargestSlice_TRG_T/Patient-*';
 
 %dataset = 'UH-';
 
-pathIn = '/Users/leobao/Documents/MultiPlanePipeline/Data/CoronalTestingLargestSlice_TRG_T/';
+pathIn = '/Users/leobao/Documents/MultiPlanePipeline/Data/AxialTrainingLargestSlice_TRG_T/';
 path = path_data; % For Linux
-pathOut= '/Users/leobao/Documents/MultiPlanePipeline/Data/CoronalTestingShapeFeatures_TRG_T/';
+pathOut= '/Users/leobao/Documents/MultiPlanePipeline/Data/AxialTrainingShapeFeatures_TRG_T/';
 %folders = {'RectalCA_'};
 regions = {'proxfat10'};%, 'tumor', 'proxfat'}; %'Lumen' or 'ERW'
 

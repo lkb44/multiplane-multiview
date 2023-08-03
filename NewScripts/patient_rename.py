@@ -1,7 +1,7 @@
 import os
 import csv
 
-parent_path = '/Users/leobao/Documents/MultiPlanePipeline/multiplane-multiview/Coronal_Raw'
+parent_path = '/Users/leobao/Documents/MultiPlanePipeline/Renaming'
 spreadsheet_path = '/Users/leobao/Documents/MultiPlanePipeline/multiplane-multiview/T0-2vT3-4cohort_split.csv'
 
 # Read the spreadsheet and store the mapping of original folder names to new folder names

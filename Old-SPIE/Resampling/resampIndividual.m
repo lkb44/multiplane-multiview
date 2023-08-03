@@ -6,10 +6,10 @@ addpath(genpath(pwd))
 addpath(genpath("/Users/leobao/Library/CloudStorage/GoogleDrive-lkb44@case.edu/Shared drives/INVent/tom/Conferences/2022-SPIE/Feature_Selection_Classification_Code/Feature_Classifier/mha"));
 
 problems = [];
-pathIn = '/Users/leobao/Documents/MultiPlanePipeline/Coronal_Raw/';
+pathIn = '/Users/leobao/Documents/MultiPlanePipeline/AnnotateLumen/';
 
-DirectoryIn= '/Users/leobao/Documents/MultiPlanePipeline/Coronal_Raw/Patient-*';
-pathOut= '/Users/leobao/Documents/MultiPlanePipeline/Patients/';
+DirectoryIn= '/Users/leobao/Documents/MultiPlanePipeline/AnnotateLumen/Patient-*';
+pathOut= '/Users/leobao/Documents/MultiPlanePipeline/Patients_Axial/';
 
 Imgs = dir(fullfile(DirectoryIn));
 theFilesvol = {Imgs.name};

@@ -30,7 +30,7 @@ def check_mask(input_mask):
         print("Mask is binary.")
         return True
 
-directory = "/Users/leobao/Documents/MultiPlanePipeline/RevisePatients"
+directory = "/Users/leobao/Documents/MultiPlanePipeline/Patients_Axial"
 dir_list = os.listdir(directory)
 dir_list = sorted([ d for d in dir_list if "." not in d])
 
@@ -45,7 +45,7 @@ for folder in dir_list:
     # Find mask file
     files = os.listdir(os.path.join(directory, folder))
     mask_file = [f for f in files if "label" in f]
-    volume_name = folder + "_cor.mha" # Replace with _pre_ax_resampled.mha for UH axial, _pre_cor_resampled for UH cor, and or _cor_resampled.mha for VA
+    volume_name = folder + "_ax.mha" # Replace with _pre_ax_resampled.mha for UH axial, _pre_cor_resampled for UH cor, and or _cor_resampled.mha for VA
     vol_file = os.path.join(directory, folder, volume_name)
     
     # Read in mask file
@@ -195,7 +195,7 @@ for folder in dir_list:
         write_mha(dilated15_mask, spacing, origin, output)
         
         # Save scan
-        out_name = volume_name.replace("_cor.mha", "_cor_ls.mha")
+        out_name = volume_name.replace("_ax.mha", "_ax_ls.mha")
         output = os.path.join(directory, folder, out_name)
         write_mha(new_vol, spacing, origin, output)
         
@@ -203,4 +203,4 @@ for folder in dir_list:
         print(e)
         sys.exit(1)
     
-slice_tracker.to_excel("LTS_cor_Problems_Tracker_rp.xlsx", index = False)
+slice_tracker.to_excel("LTS_ax_Problems_Tracker_rp.xlsx", index = False)
