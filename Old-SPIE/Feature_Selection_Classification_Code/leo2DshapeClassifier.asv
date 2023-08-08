@@ -12,8 +12,8 @@ if isunix
 end
 %% Specify dataset information
 view = {'Coronal'}; % {Can only be 'Axial'}, {'Coronal'} or {'Axial','Coronal'}
-rois = {'Proximal_Fat15'};
-scheme = {'wilcoxon_svm'}; % {'wilcoxon_qda'}, {'wilcoxon_rf'}, {'mrmr_qda'}, or {'mrmr_rf'}
+rois = {'Tumor'};
+scheme = {'w_svm'}; % {'wilcoxon_qda'}, {'wilcoxon_rf'}, {'mrmr_qda'}, or {'mrmr_rf'}
 split = {'_TRG_T'};
 
 if strcmp(rois, "Proximal_Fat5")
@@ -272,7 +272,7 @@ fprintf("Whitened the training and holdout testing datasets successfully! \n");
 saveParams = true;
 if(isequal(saveParams,true))
     params.classifier='SVM';
-    params.fsname='wilcoxon';
+    params.fsname='mrmr';
     params.shuffle = 1;
     params.n = 5;
     params.nIter = 50;
