@@ -13,7 +13,7 @@ end
 %% Specify dataset information
 view = {'Coronal'}; % {Can only be 'Axial'}, {'Coronal'} or {'Axial','Coronal'}
 rois = {'Tumor'};
-scheme = {'mrmr_lda'}; % {'wilcoxon_qda'}, {'wilcoxon_rf'}, {'mrmr_qda'}, or {'mrmr_rf'}
+scheme = {'mrmr_svm'}; % {'wilcoxon_qda'}, {'wilcoxon_rf'}, {'mrmr_qda'}, or {'mrmr_rf'}
 split = {'TRG_80_20_T_27_Split'};
 
 if strcmp(rois, "Proximal_Fat5")
@@ -186,7 +186,7 @@ fprintf("Whitened the training and holdout testing datasets successfully! \n");
 %% Initialize classifier params for classifier
 saveParams = true;
 if(isequal(saveParams,true))
-    params.classifier='LDA';
+    params.classifier='SVM';
     params.fsname='mrmr';
     params.shuffle = 1;
     params.n = 5;
