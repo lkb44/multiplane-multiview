@@ -1,0 +1,95 @@
+﻿Actual Patient ID,Ordered Patient ID,Cohort,Label
+UH-RectalCA-002,Patient-001,Test 2,0
+UH-RectalCA-003,Patient-002,Test 2,0
+UH-RectalCA-004,Patient-003,Test 2,0
+UH-RectalCA-006,Patient-004,Test 2,1
+UH-RectalCA-008,Patient-005,Test 2,1
+UH-RectalCA-009,Patient-006,,1
+UH-RectalCA-011,Patient-007,Test 2,1
+UH-RectalCA-012,Patient-008,Test 2,0
+UH-RectalCA-013,Patient-009,,1
+UH-RectalCA-018,Patient-010,Test 2,0
+UH-RectalCA-020,Patient-011,,1
+UH-RectalCA-021,Patient-012,Test 2,1
+UH-RectalCA-023,Patient-013,Test 2,0
+UH-RectalCA-024,Patient-014,Test 2,1
+UH-RectalCA-026,Patient-015,Test 2,0
+UH-RectalCA-027,Patient-016,,0
+UH-RectalCA-028,Patient-017,Test 2,0
+UH-RectalCA-030,Patient-018,Test 2,0
+UH-RectalCA-033,Patient-019,,0
+UH-RectalCA-035,Patient-020,Test 2,0
+UH-RectalCA-037,Patient-021,,1
+UH-RectalCA-038,Patient-022,,1
+UH-RectalCA-040,Patient-023,Test 2,0
+UH-RectalCA-041,Patient-024,Test 2,0
+UH-RectalCA-045,Patient-025,,1
+UH-RectalCA-049,Patient-026,Test 2,0
+UH-RectalCA-052,Patient-027,,0
+UH-RectalCA-053,Patient-028,,1
+UH-RectalCA-055,Patient-029,,1
+UH-RectalCA-058,Patient-030,Test 2,0
+UH-RectalCA-059,Patient-031,,0
+UH-RectalCA-060,Patient-032,,1
+UH-RectalCA-061,Patient-033,,0
+UH-RectalCA-062,Patient-034,,0
+UH-RectalCA-065,Patient-035,Test 2,1
+UH-RectalCA-068,Patient-036,,0
+UH-RectalCA-070,Patient-037,,1
+UH-RectalCA-072,Patient-038,Test 2,0
+UH-RectalCA-073,Patient-039,,1
+UH-RectalCA-078,Patient-040,,1
+UH-RectalCA-079,Patient-041,,0
+UH-RectalCA-081,Patient-042,,1
+UH-RectalCA-084,Patient-043,,0
+UH-RectalCA-085,Patient-044,Test 2,0
+UH-RectalCA-087,Patient-045,,0
+UH-RectalCA-088,Patient-046,Test 2,1
+UH-RectalCA-090,Patient-047,,1
+UH-RectalCA-111,Patient-048,,0
+UH-RectalCA-112,Patient-049,Test 2,0
+UH-RectalCA-113,Patient-050,Test 2,0
+UH-RectalCA-114,Patient-051,Test 2,0
+UH-RectalCA-115,Patient-052,Test 2,1
+UH-RectalCA-120,Patient-053,,0
+UH-RectalCA-123,Patient-054,,0
+UH-RectalCA-124,Patient-055,,0
+UH-RectalCA-125,Patient-056,,0
+UH-RectalCA-127,Patient-057,,1
+UH-RectalCA-128,Patient-058,,1
+UH-RectalCA-129,Patient-059,,1
+UH-RectalCA-130,Patient-060,,0
+UH-RectalCA-132,Patient-061,,0
+UH-RectalCA-133,Patient-062,,0
+UH-RectalCA-139,Patient-063,,1
+UH-RectalCA-141,Patient-064,,1
+UH-RectalCA-143,Patient-065,,1
+UH-RectalCA-144,Patient-066,,1
+UH-RectalCA-147,Patient-067,,1
+UH-RectalCA-148,Patient-068,,1
+UH-RectalCA-149,Patient-069,,1
+UH-RectalCA-151,Patient-070,,1
+UH-RectalCA-152,Patient-071,,0
+UH-RectalCA-156,Patient-072,,1
+UH-RectalCA-158,Patient-073,,1
+UH-RectalCA-159,Patient-074,,1
+UH-RectalCA-160,Patient-075,,1
+UH-RectalCA-161,Patient-076,,0
+UH-RectalCA-162,Patient-077,,0
+UH-RectalCA-163,Patient-078,,1
+UH-RectalCA-164,Patient-079,,1
+UH-RectalCA-166,Patient-080,,1
+UH-RectalCA-167,Patient-081,,1
+UH-RectalCA-168,Patient-082,,1
+UH-RectalCA-169,Patient-083,,0
+UH-RectalCA-170,Patient-084,,0
+UH-RectalCA-171,Patient-085,,1
+UH-RectalCA-173,Patient-086,,1
+UH-RectalCA-174,Patient-087,,1
+VA-RectalCA-002,Patient-088,,0
+VA-RectalCA-004,Patient-089,,0
+VA-RectalCA-005,Patient-090,,1
+VA-RectalCA-006,Patient-091,,1
+VA-RectalCA-008,Patient-092,,1
+UH-RectalCA-014,Patient-093,Test 2,1
+VA-RectalCA-003,Patient-094,,1

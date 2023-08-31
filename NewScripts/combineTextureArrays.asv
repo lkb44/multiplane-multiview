@@ -1,0 +1,80 @@
+clc;
+clear;
+close all;
+
+view = "Coronal";
+
+feature_family = "Texture";
+roi = "Tumor";
+region = 'tumor';
+cohort = "Training";
+split = "TRG_80_20_T_27_Split";
+
+root_path = "/Volumes/Crucial X6/CombineTexture/";
+
+matlab_input_path = strcat(root_path, view, '_', roi, '_Matlab/');
+python_input_path = strcat(root_path, view, '_', roi, '_Python/');
+output_path = strcat(root_path, view, '_', roi, '_Python/');
+
+% Get a list of .mat files in the directory
+patient_list = dir(fullfile(python_input_path, 'Feats_Col_Patient-*.mat'));
+
+% Initialize a cell array to store the patient IDs
+patient_ids = cell(1, numel(patient_list));
+
+% Extract patient IDs from the filenames
+for i = 1:numel(patient_list)
+    file_name = patient_list(i).name;
+    [~, name_without_extension] = fileparts(file_name); % Remove the '.mat' extension
+    patient_id = name_without_extension(19:21); % Extract the patient ID (assuming the format)
+    patient_ids{i} = patient_id;
+end
+
+% Convert the cell array to a string array (optional)
+patient_ids_string = string(patient_ids);
+feature_matrix = [];
+
+for i = 1 : length(patient_ids_string)
+    matlab_patient_path = strcat(matlab_input_path, 'Patient-', patient_ids_string(i), '_', region, '.mat');
+    /Volumes/Crucial X6/CombineTexture/Coronal_Tumor_Python/Feats_Col_Patient-001_cor.mat
+    python_patient_path = strcat(matlab_input_path, 'Feats_Col_Patient-', patient_ids_string(i), '_', region, '.mat');
+    patient_path = strcat(input_path, 'Patient-', patient_ids_string{i}, '.mat');
+    features = load(patient_path);
+    features = features.feature_matrix;
+
+    feature_matrix = [feature_matrix; features];
+
+end
+
+% save(output_path, "feature_matrix");
+
+% % Initialize an empty cell array to store the IDs
+% idCellArray = {};
+% 
+% % Generate IDs and add them to the cell array
+% for i = 1:92
+%     % Convert the index to a three-digit string
+%     id = sprintf('%03d', i);
+%     idCellArray{i} = id;
+% end
+% 
+% % Convert the cell array to a string array (optional)
+% idVector = string(idCellArray);
+% 
+% matlab_feature_directory = '/Volumes/Crucial X6/CombineTexture/Axial_Tumor_Matlab/';
+% python_feature_directory = '/Volumes/Crucial X6/CombineTexture/Axial_Tumor_Python/';
+% output_directory = '/Volumes/Crucial X6/CombineTexture/Axial_Tumor/';
+% 
+% for i = 1:length(idVector)
+%     matlab_array_path = strcat(matlab_feature_directory, 'Patient-', idVector(i), "_tumor.mat");
+%     python_array_path = strcat(python_feature_directory, 'Feats_Col_Patient-', idVector(i), '_ax.mat');
+%     output_path = strcat(output_directory, 'Patient-', idVector(i), ".mat");
+% 
+%     matlab_array = load(matlab_array_path, "feature_matrix");
+%     python_array = load(python_array_path, "feature_matrix");
+%     
+%     combined_array = struct('feature_matrix', [matlab_array.feature_matrix, python_array.feature_matrix]);
+%     
+%     save(output_path, '-struct', 'combined_array');
+% 
+% end

@@ -30,7 +30,7 @@ def check_mask(input_mask):
         print("Mask is binary.")
         return True
 
-directory = "/Users/leobao/Documents/MultiPlanePipeline/Patients_Axial"
+directory = "/Users/leobao/Documents/Temporary/AxialReDoOut"
 dir_list = os.listdir(directory)
 dir_list = sorted([ d for d in dir_list if "." not in d])
 

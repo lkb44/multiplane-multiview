@@ -1,0 +1,67 @@
+Actual Patient ID,Ordered Patient ID,Cohort,Label
+UH-RectalCA-009,Patient-006,Train,1
+UH-RectalCA-013,Patient-009,Train,1
+UH-RectalCA-020,Patient-011,Train,1
+UH-RectalCA-027,Patient-016,Train,0
+UH-RectalCA-033,Patient-019,Train,0
+UH-RectalCA-037,Patient-021,Train,1
+UH-RectalCA-038,Patient-022,Train,1
+UH-RectalCA-045,Patient-025,Train,1
+UH-RectalCA-052,Patient-027,Train,0
+UH-RectalCA-053,Patient-028,Train,1
+UH-RectalCA-055,Patient-029,Test 1,1
+UH-RectalCA-059,Patient-031,Train,0
+UH-RectalCA-060,Patient-032,Train,1
+UH-RectalCA-061,Patient-033,Train,0
+UH-RectalCA-062,Patient-034,Train,0
+UH-RectalCA-068,Patient-036,Test 1,0
+UH-RectalCA-070,Patient-037,Train,1
+UH-RectalCA-073,Patient-039,Test 1,1
+UH-RectalCA-078,Patient-040,Train,1
+UH-RectalCA-079,Patient-041,Test 1,0
+UH-RectalCA-081,Patient-042,Train,1
+UH-RectalCA-084,Patient-043,Train,0
+UH-RectalCA-087,Patient-045,Train,0
+UH-RectalCA-090,Patient-047,Train,1
+UH-RectalCA-111,Patient-048,Test 1,0
+UH-RectalCA-120,Patient-053,Train,0
+UH-RectalCA-123,Patient-054,Train,0
+UH-RectalCA-124,Patient-055,Train,0
+UH-RectalCA-125,Patient-056,Test 1,0
+UH-RectalCA-127,Patient-057,Test 1,1
+UH-RectalCA-128,Patient-058,Train,1
+UH-RectalCA-129,Patient-059,Train,1
+UH-RectalCA-130,Patient-060,Train,0
+UH-RectalCA-132,Patient-061,Train,0
+UH-RectalCA-133,Patient-062,Train,0
+UH-RectalCA-139,Patient-063,Train,1
+UH-RectalCA-141,Patient-064,Test 1,1
+UH-RectalCA-143,Patient-065,Train,1
+UH-RectalCA-144,Patient-066,Test 1,1
+UH-RectalCA-147,Patient-067,Train,1
+UH-RectalCA-148,Patient-068,Test 1,1
+UH-RectalCA-149,Patient-069,Train,1
+UH-RectalCA-151,Patient-070,Train,1
+UH-RectalCA-152,Patient-071,Train,0
+UH-RectalCA-156,Patient-072,Train,1
+UH-RectalCA-158,Patient-073,Train,1
+UH-RectalCA-159,Patient-074,Train,1
+UH-RectalCA-160,Patient-075,Test 1,1
+UH-RectalCA-161,Patient-076,Test 1,0
+UH-RectalCA-162,Patient-077,Train,0
+UH-RectalCA-163,Patient-078,Train,1
+UH-RectalCA-164,Patient-079,Train,1
+UH-RectalCA-166,Patient-080,Train,1
+UH-RectalCA-167,Patient-081,Train,1
+UH-RectalCA-168,Patient-082,Test 1,1
+UH-RectalCA-169,Patient-083,Train,0
+UH-RectalCA-170,Patient-084,Train,0
+UH-RectalCA-171,Patient-085,Train,1
+UH-RectalCA-173,Patient-086,Train,1
+UH-RectalCA-174,Patient-087,Train,1
+VA-RectalCA-002,Patient-088,Train,0
+VA-RectalCA-004,Patient-089,Test 1,0
+VA-RectalCA-005,Patient-090,Train,1
+VA-RectalCA-006,Patient-091,Test 1,1
+VA-RectalCA-008,Patient-092,Train,1
+VA-RectalCA-003,Patient-094,Train,1

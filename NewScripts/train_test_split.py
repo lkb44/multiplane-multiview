@@ -5,10 +5,12 @@ import random
 random.seed(42)
 
 # File path of the spreadsheet
-file_path = '/Users/leobao/Documents/MultiPlanePipeline/multiplane-multiview/T0-2vT3-4cohort.csv'
+file_path = '/Users/leobao/Documents/MultiPlanePipeline/multiplane-multiview/TRG_80_TRG_20_T_27_cohort.csv'
 
 # Read the spreadsheet into a pandas DataFrame
 df = pd.read_csv(file_path)
+df = df[df['Cohort'].isnull()]
+df.reset_index(drop=True, inplace=True)
 
 # Calculate the number of patients for each cohort
 total_patients = len(df)
@@ -41,10 +43,16 @@ test_cohort = test_cohort.sample(frac=1, random_state=42)
 
 # Update the assigned cohort column in the DataFrame
 df.loc[train_cohort.index, 'Cohort'] = 'Train'
-df.loc[test_cohort.index, 'Cohort'] = 'Test'
+df.loc[test_cohort.index, 'Cohort'] = 'Test 1'
+
+print("Train Cohort:")
+print(train_cohort)
+
+print("\nTest Cohort:")
+print(test_cohort)
 
 # Save the updated DataFrame to a new CSV file
-output_file_path = '/Users/leobao/Documents/MultiPlanePipeline/multiplane-multiview/T0-2vT3-4cohort_split.csv'
+output_file_path = '/Users/leobao/Documents/MultiPlanePipeline/multiplane-multiview/Test1_Train_Cohort.csv'
 df.to_csv(output_file_path, index=False)
 
 print('Cohort split completed. The updated DataFrame has been saved to', output_file_path)
