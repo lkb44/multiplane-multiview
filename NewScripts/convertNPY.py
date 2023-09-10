@@ -20,6 +20,6 @@ def convert_mha_to_npy(input_path, output_path):
             np.save(npy_path, image_array)
 
 if __name__ == "__main__":
-    input_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/Axial_ProxFat10"
-    output_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/Axial_ProxFat10_NPY"
+    input_path = "/Users/leobao/Documents/MultiPlanePipeline/CollageReExtraction/Patient-011/"
+    output_path = "/Users/leobao/Documents/MultiPlanePipeline/CollageMAT/Patient-011/"
     convert_mha_to_npy(input_path, output_path)

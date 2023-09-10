@@ -22,7 +22,7 @@ viz.preprocess.match_image_masks(images_path,
                                 mask_id_func= lambda x: x.split("-")[-1][:3],
                                 save_path="dataset_schema.csv")
 
-viz.collage.compute_stats_collage(
+viz.feats.compute_stats_collage(
     csv_path="dataset_schema.csv",
     stats_save_path="test_stats/",
 )
