@@ -10,176 +10,140 @@ if isunix
     addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/Scripts-DataPreProcessing/Util-preProcessing'));
     % addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/2D_Shape_Feature_Extraction_Code/scripts/feature_selection/mrmr_feature_select/estpab.mexmac'));
 end
-%% Specify dataset information
-%view = {'Coronal'}; % {Can only be 'Axial'}, {'Coronal'} or {'Axial','Coronal'}
-rois = {'Tumor'};
-scheme = {'wilcoxon_qda'}; % {'wilcoxon_qda'}, {'wilcoxon_rf'}, {'mrmr_qda'}, or {'mrmr_rf'}
-split = {'TRG_80_20_T_27_Split'};
+region = {'Best_Fat'}; % Can be 'best_fat' or 'best_tumor'
+split = {'missingCollage'};
+scheme = {'mrmr_svm'};
 
-if strcmp(rois, "Proximal_Fat5")
-    experiment_type = 'proxfat5_only';
-elseif strcmp(rois, "Proximal_Fat10")
-    experiment_type = 'proxfat10_only';
-elseif strcmp(rois, "Proximal_Fat15")
-    experiment_type = 'proxfat15_only';
-elseif strcmp(rois, "Fat")
-    experiment_type = 'fat_only';
-elseif strcmp(rois, "Tumor")
-    experiment_type = 'tumor_only';
-end
-% Print experiment types
-fprintf(strcat("USING THE FOLLOWING VIEW(S): ", strjoin(view), "\n"));
-fprintf("EXPERIMENT TYPE: %s \n", experiment_type);
-%% Specify paths to ground truth labels
-training_label_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/train_test_labels/TRG(80:20):T(27) Labels/train_labels.csv";
-testing1_label_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/train_test_labels/TRG(80:20):T(27) Labels/test1_labels.csv';
-testing2_label_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/train_test_labels/TRG(80:20):T(27) Labels/test2_labels.csv';
+matrix_root_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollage/';
 
-axial_train_matrix_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/TRG_80_20_T_27_Split/Training/AxialTextureFeatures/Tumor_Training.mat";
-axial_test1_matrix_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/TRG_80_20_T_27_Split/Testing1/AxialTextureFeatures/Tumor_Testing1.mat";
-axial_test2_matrix_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/TRG_80_20_T_27_Split/Testing2/AxialTextureFeatures/Tumor_Testing2.mat";
+axial_train_matrix_path = string(strcat(matrix_root_path, 'Axial_', region, '_Training.mat'));
+axial_test1_matrix_path = string(strcat(matrix_root_path, 'Axial_', region, '_Testing1.mat'));
+axial_test2_matrix_path = string(strcat(matrix_root_path, 'Axial_', region, '_Testing2.mat'));
 
-coronal_train_matrix_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/TRG_80_20_T_27_Split/Training/CoronalTextureFeatures/Tumor_Training.mat";
-coronal_test1_matrix_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/TRG_80_20_T_27_Split/Testing1/CoronalTextureFeatures/Tumor_Testing1.mat";
-coronal_test2_matrix_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/TRG_80_20_T_27_Split/Testing2/CoronalTextureFeatures/Tumor_Testing2.mat";
+coronal_train_matrix_path = string(strcat(matrix_root_path, 'Coronal_', region, '_Training.mat'));
+coronal_test1_matrix_path = string(strcat(matrix_root_path, 'Coronal_', region, '_Testing1.mat'));
+coronal_test2_matrix_path = string(strcat(matrix_root_path, 'Coronal_', region, '_Testing2.mat'));
+
+axial_path_to_train = string(axial_train_matrix_path);
+axial_path_to_test1 = string(axial_test1_matrix_path);
+axial_path_to_test2 = string(axial_test2_matrix_path);
+
+coronal_path_to_train = string(coronal_train_matrix_path);
+coronal_path_to_test1 = string(coronal_test1_matrix_path);
+coronal_path_to_test2 = string(coronal_test2_matrix_path);
+
+label_path_root = '/Users/leobao/Documents/MultiPlanePipeline/Data/train_test_labels/MissingCollageLabels/';
+
+training_label_path = string(strcat(label_path_root, region, '/train_labels.csv'));
+testing1_label_path = string(strcat(label_path_root, region, '/test1_labels.csv'));
+testing2_label_path = string(strcat(label_path_root, region, '/test2_labels.csv'));
 
 feature_column_path = '/Users/leobao/Documents/MultiPlanePipeline/Feature_Names/Texture_Feature_Names.xlsx';
 feature_column_names = readtable(feature_column_path, 'ReadVariableNames',false);
 feature_column_names = table2cell(feature_column_names);
 
+if strcmp(scheme, 'wilcoxon_qda')
+    axial_top_feature_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/13-Sep-2023_16_46_13_Axial_proxfat10_only_wilcoxon_qda/Top_Features_Information.mat';
+    coronal_top_feature_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/13-Sep-2023_19_08_32_Coronal_proxfat10_only_wilcoxon_qda/Top_Features_Information.mat';
+elseif strcmp(scheme, 'wilcoxon_lda')
+    axial_top_feature_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/13-Sep-2023_16_46_24_Axial_proxfat10_only_wilcoxon_lda/Top_Features_Information.mat';
+    coronal_top_feature_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/13-Sep-2023_19_09_08_Coronal_proxfat10_only_wilcoxon_lda/Top_Features_Information.mat';
+elseif strcmp(scheme, 'wilcoxon_rf')
+    axial_top_feature_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/13-Sep-2023_16_46_35_Axial_proxfat10_only_wilcoxon_rf/Top_Features_Information.mat';
+    coronal_top_feature_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/13-Sep-2023_19_09_19_Coronal_proxfat10_only_wilcoxon_rf/Top_Features_Information.mat';
+elseif strcmp(scheme, 'wilcoxon_svm')
+    axial_top_feature_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/13-Sep-2023_16_46_59_Axial_proxfat10_only_wilcoxon_svm/Top_Features_Information.mat';
+    coronal_top_feature_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/13-Sep-2023_19_09_49_Coronal_proxfat10_only_wilcoxon_svm/Top_Features_Information.mat';
+elseif strcmp(scheme, 'mrmr_qda')
+    axial_top_feature_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/13-Sep-2023_17_09_58_Axial_proxfat10_only_mrmr_qda/Top_Features_Information.mat';
+    coronal_top_feature_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/13-Sep-2023_19_25_36_Coronal_proxfat10_only_mrmr_qda/Top_Features_Information.mat';
+elseif strcmp(scheme, 'mrmr_lda')
+    axial_top_feature_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/13-Sep-2023_17_10_27_Axial_proxfat10_only_mrmr_lda/Top_Features_Information.mat';
+    coronal_top_feature_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/13-Sep-2023_19_25_46_Coronal_proxfat10_only_mrmr_lda/Top_Features_Information.mat';
+elseif strcmp(scheme, 'mrmr_rf')
+    axial_top_feature_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/13-Sep-2023_17_10_47_Axial_proxfat10_only_mrmr_rf/Top_Features_Information.mat';
+    coronal_top_feature_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/13-Sep-2023_19_26_00_Coronal_proxfat10_only_mrmr_rf/Top_Features_Information.mat';
+elseif strcmp(scheme, 'mrmr_svm')
+    axial_top_feature_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/13-Sep-2023_17_11_13_Axial_proxfat10_only_mrmr_svm/Top_Features_Information.mat';
+    coronal_top_feature_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/13-Sep-2023_19_26_29_Coronal_proxfat10_only_mrmr_svm/Top_Features_Information.mat';
+end
+
+axial_top_feats = load(axial_top_feature_path).topResults;
+coronal_top_feats = load(coronal_top_feature_path).topResults;
+
+axial_top_indices = axial_top_feats.indices';
+coronal_top_indices = coronal_top_feats.indices';
+
 fprintf("Got directory paths to feature matrices! \n");
 
-%% Create output directory
-
-
-output_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/TRG_80_20_T_27_Split/Results/";
-experiment_date = strrep(string(datetime(now,'ConvertFrom','datenum')), " ", "_");
+output_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/";
+experiment_date = strrep(string(datetime("now")), " ", "_");
 experiment_date = strrep(experiment_date, ":", "_");
-output_path = strcat(output_path, experiment_date, "_", view, "_", split, "_", experiment_type, "_", scheme, "/");
+output_path = strcat(output_path, experiment_date, "_", region, "_", scheme, "/");
 if(~exist(output_path, "dir"))
     mkdir(output_path);
 end
 
 fprintf("Created output directory for this experiment! \n");
 
-%% Load in datasets
-
 datasets = struct;
 
-train_matrices = dir(fullfile(axial_train_matrix_path));
-train = {train_matrices.name};
-
-fat_train = find(contains(train,'Coronal_Fat'));
-proxfat5_train = find(contains(train,'_ProxFat5'));
-proxfat10_train = find(contains(train,'_ProxFat10'));
-proxfat15_train = find(contains(train,'_ProxFat15'));
-tumor_train = find(contains(train,'_Tumor'));
-
-test1_matrices = dir(fullfile(axial_test1_matrix_path));
-test1 = {test1_matrices.name};
-
-test2_matrices = dir(fullfile(axial_test2_matrix_path));
-test2 = {test2_matrices.name};
-
-fat_test1 = find(contains(test1,'Coronal_Fat'));
-proxfat5_test1 = find(contains(test1,'_ProxFat5'));
-proxfat10_test1 = find(contains(test1,'_ProxFat10'));
-proxfat15_test1 = find(contains(test1,'_ProxFat15'));
-tumor_test1 = find(contains(test1,'_Tumor'));
-
-fat_test2 = find(contains(test2,'Coronal_Fat'));
-proxfat5_test2 = find(contains(test2,'_ProxFat5'));
-proxfat10_test2 = find(contains(test2, '_ProxFat10'));
-proxfat15_test2 = find(contains(test2,'_ProxFat15'));
-tumor_test2 = find(contains(test2,'_Tumor'));
-
-for i = 1:length(rois)
-    if strcmp(rois(i), 'Fat')
-        path_to_train = strcat(axial_train_matrix_path, train{fat_train});
-    end
-    if strcmp(rois(i), 'Proximal_Fat5')
-        path_to_train = strcat(axial_train_matrix_path, train{proxfat5_train});
-    end
-    if strcmp(rois(i), 'Proximal_Fat10')
-        path_to_train = strcat(axial_train_matrix_path, train{proxfat10_train});
-    end
-    if strcmp(rois(i), 'Proximal_Fat15')
-        path_to_train = strcat(axial_train_matrix_path, train{proxfat15_train});
-    end
-    if strcmp(rois(i), 'Tumor')
-        path_to_train = axial_train_matrix_path;
-    end
-
-    if strcmp(rois(i), 'Fat')
-        axialpath_to_test1 = strcat(axial_test1_matrix_path, test1{fat_test1});
-        axialpath_to_test2 = strcat(axial_test2_matrix_path, test2{fat_test2});
-    end
-    if strcmp(rois(i), 'Proximal_Fat5')
-        axialpath_to_test1 = strcat(axial_test1_matrix_path, test1{proxfat5_test1});
-        axialpath_to_test2 = strcat(axial_test2_matrix_path, test2{proxfat5_test2});
-    end
-    if strcmp(rois(i), 'Proximal_Fat10')
-        axialpath_to_test1 = strcat(axial_test1_matrix_path, test1{proxfat10_test1});
-        axialpath_to_test2 = strcat(axial_test2_matrix_path, test2{proxfat10_test2});
-    end
-    if strcmp(rois(i), 'Proximal_Fat15')
-        axialpath_to_test1 = strcat(axial_test1_matrix_path, test1{proxfat15_test1});
-        axialpath_to_test2 = strcat(axial_test2_matrix_path, test2{proxfat15_test2});
-    end
-    if strcmp(rois(i), 'Tumor')
-        axialpath_to_test1 = axial_test1_matrix_path;
-        axialpath_to_test2 = axial_test2_matrix_path;
-        coronalpath_to_test1 = coronal_test1_matrix_path;
-        coronalpath_to_test2 = coronal_test2_matrix_path;
-    end
-
-    datasets.(strcat("train_",rois{i})) = load(axial_path_to_train);
-    datasets.(strcat("test1_",rois{i})) = load(axialpath_to_test1);
-    datasets.(strcat("test2_",rois{i})) = load(axialpath_to_test2);
-end
+datasets.(strcat("axial_train_", region)) = load(axial_path_to_train);
+datasets.(strcat("axial_test1_", region)) = load(axial_path_to_test1);
+datasets.(strcat("axial_test2_", region)) = load(axial_path_to_test2);
+datasets.(strcat("coronal_train_", region)) = load(coronal_path_to_train);
+datasets.(strcat("coronal_test1_", region)) = load(coronal_path_to_test1);
+datasets.(strcat("coronal_test2_", region)) = load(coronal_path_to_test2);
 
 data_labels_training = readmatrix(training_label_path);
-% data_labels_training = data_labels_training(:, 2);
-
 data_labels_holdout1 = readmatrix(testing1_label_path);
 data_labels_holdout2 = readmatrix(testing2_label_path);
-% data_labels_holdout = data_labels_holdout(:, 2);
 
-if(length(view) == 1 && experiment_type == "tumor_only")
-    features_training = datasets.train_Tumor.feature_matrix;
-    features_holdout1 = datasets.test1_Tumor.feature_matrix;
-    features_holdout2 = datasets.test2_Tumor.feature_matrix;
-    feature_column_names = strcat(view{1}, "_tumor_", feature_column_names);
+axial_training_features = datasets.axial_train_Best_Fat.feature_matrix;
+axial_testing1_features = datasets.axial_test1_Best_Fat.feature_matrix;
+axial_testing2_features = datasets.axial_test2_Best_Fat.feature_matrix;
+coronal_training_features = datasets.coronal_train_Best_Fat.feature_matrix;
+coronal_testing1_features = datasets.coronal_test1_Best_Fat.feature_matrix;
+coronal_testing2_features = datasets.coronal_test2_Best_Fat.feature_matrix;
 
-elseif(length(view) == 1 && experiment_type == "fat_only")
-    features_training = datasets.train_Fat.feature_matrix;
-    features_holdout1 = datasets.test1_Fat.feature_matrix;
-    features_holdout2 = datasets.test2_Fat.feature_matrix;
-    feature_column_names = strcat(view{1}, "_fat_", feature_column_names);
+axial_top5_training_feats = zeros(size(axial_training_features, 1), 5);
+axial_top5_testing1_feats = zeros(size(axial_testing1_features, 1), 5);
+axial_top5_testing2_feats = zeros(size(axial_testing2_features, 1), 5);
+coronal_top5_training_feats = zeros(size(coronal_training_features, 1), 5);
+coronal_top5_testing1_feats = zeros(size(coronal_testing1_features, 1), 5);
+coronal_top5_testing2_feats = zeros(size(coronal_testing2_features, 1), 5);
 
-elseif(length(view) == 1 && experiment_type == "proxfat5_only")
-    features_training = datasets.train_Proximal_Fat5.feature_matrix;
-    features_holdout1 = datasets.test1_Proximal_Fat5.feature_matrix;
-    features_holdout2 = datasets.test2_Proximal_Fat5.feature_matrix;
-    feature_column_names = strcat(view{1}, "_proxfat5_", feature_column_names);
+axial_top5_feature_names = cell(1, 5);
+coronal_top5_feature_names = cell(1, 5);
 
-elseif(length(view) == 1 && experiment_type == "proxfat10_only")
-    features_training = datasets.train_Proximal_Fat10.feature_matrix;
-    features_holdout1 = datasets.test1_Proximal_Fat10.feature_matrix;
-    features_holdout2 = datasets.test2_Proximal_Fat10.feature_matrix;
-    feature_column_names = strcat(view{1}, "_proxfat10_", feature_column_names);
+for i = 1:5
+    axial_index = axial_top_indices(i);
+    coronal_index = coronal_top_indices(i);
 
-elseif(length(view) == 1 && experiment_type == "proxfat15_only")
-    features_training = datasets.train_Proximal_Fat15.feature_matrix;
-    features_holdout1 = datasets.test1_Proximal_Fat15.feature_matrix;
-    features_holdout2 = datasets.test2_Proximal_Fat15.feature_matrix;
-    feature_column_names = strcat(view{1}, "_proxfat15_", feature_column_names);
+    axial_top5_training_feats(:, i) = axial_training_features(:, axial_index);
+    axial_top5_testing1_feats(:, i) = axial_testing1_features(:, axial_index);
+    axial_top5_testing2_feats(:, i) = axial_testing2_features(:, axial_index);
+    axial_top5_feature_names(:, i) = feature_column_names(:, axial_index);
+
+    coronal_top5_training_feats(:, i) = coronal_training_features(:, coronal_index);
+    coronal_top5_testing1_feats(:, i) = coronal_testing1_features(:, coronal_index);
+    coronal_top5_testing2_feats(:, i) = coronal_testing2_features(:, coronal_index);
+    coronal_top5_feature_names(:, i) = feature_column_names(:, coronal_index);
 end
+
+feature_column_names = [axial_top5_feature_names, coronal_top5_feature_names];
+features_training = [axial_top5_training_feats, coronal_top5_training_feats];
+features_holdout1 = [axial_top5_testing1_feats, coronal_top5_testing1_feats];
+features_holdout2 = [axial_top5_testing2_feats, coronal_top5_testing2_feats];
+
+feature_file_name = string(strcat(output_path, 'top10_features.xlsx'));
+feature_table = cell2table(feature_column_names);
+writetable(feature_table, feature_file_name);
 
 holdout_test_size1 = size(features_holdout1);
 holdout_test_size2 = size(features_holdout2);
-assert(holdout_test_size1(1) == 15, "The size of the dataset is incorrect!");
-assert(holdout_test_size2(1) == 26, "The size of the dataset is incorrect!");
+assert(holdout_test_size1(1) == 14, "The size of the dataset is incorrect!");
+assert(holdout_test_size2(1) == 27, "The size of the dataset is incorrect!");
 
 fprintf("Loaded in train and holdout testing datasets! \n");
 %% Whiten the data
@@ -192,34 +156,39 @@ fprintf("Whitened the training and holdout testing datasets successfully! \n");
 %% Initialize classifier params for classifier
 saveParams = true;
 if(isequal(saveParams,true))
-    params.classifier='QDA';
-    params.fsname='wilcoxon';
+    if strcmp(scheme, 'wilcoxon_qda')
+        params.classifier='QDA';
+        params.fsname='wilcoxon';
+    elseif strcmp(scheme, 'wilcoxon_lda')
+        params.classifier='LDA';
+        params.fsname='wilcoxon';
+    elseif strcmp(scheme, 'wilcoxon_rf')
+        params.classifier='RANDOMFOREST';
+        params.fsname='wilcoxon';
+    elseif strcmp(scheme, 'wilcoxon_svm')
+        params.classifier='SVM';
+        params.fsname='wilcoxon';
+    elseif strcmp(scheme, 'mrmr_qda')
+        params.classifier='QDA';
+        params.fsname='mrmr';
+    elseif strcmp(scheme, 'mrmr_lda')
+        params.classifier='LDA';
+        params.fsname='mrmr';
+    elseif strcmp(scheme, 'mrmr_rf')
+        params.classifier='RANDOMFOREST';
+        params.fsname='mrmr';
+    elseif strcmp(scheme, 'mrmr_svm')
+        params.classifier='SVM';
+        params.fsname='mrmr';
+    end
     params.shuffle = 1;
     params.n = 5;
     params.nIter = 50;
     params.num_top_feats = 5;
-    %params.num_top_feats = length(features_training(1,:));
     params.threshmeth = 'euclidean';
     params.osname = 'SMOTE';
-    %params.fsprunecorr = 'true';
+    params.fsprunecorr = 'false';
     params.featnames = feature_column_names;
-
-    %% Use same patients in each fold for every iteration of cross validation.
-        % In every iteration of cross validation, the same XX patients are used
-        % for training in each fold.
-        % In every iteration of cross validation, the same XX patients are used
-        % for testing in each fold.
-    params.shuffle = 1;
-
-    % for idx=1:params.n
-    %     train_folds{idx} = train_folds{1};
-    %     test_folds{idx} = test_folds{1};
-    % end
-%     for i=1:params.nIter
-%         [train_folds, test_folds] = nFold([], data_labels_training, params.shuffle, params.n);
-%         params.subsets(i).training = train_folds;
-%         params.subsets(i).testing = test_folds;
-%     end
     save(strcat(output_path, 'Classifier_params.mat'),'params');
 else
     params = load('Classifier_params.mat');
@@ -229,14 +198,10 @@ end
 %% Create experimental log
 log_file_name = strcat(output_path, "Summary_of_Experiment_", experiment_date, ".txt");
 fileid = fopen(log_file_name,'w');
-fprintf(fileid, strcat("Experiment Date and Time: ", string(datetime(now,'ConvertFrom','datenum')), '\n\r'));
-fprintf(fileid, strcat("USING THE FOLLOWING VIEW(S): ", strjoin(view), "\n"));
-fprintf(fileid, "EXPERIMENT TYPE: %s \n", experiment_type);
+fprintf(fileid, strcat("Experiment Date and Time: ", string(datetime("now")), '\n\r'));
 fprintf(fileid, "FEATURE FAMILY: 3D Shape \n");
 fprintf(fileid, strcat("Trained on ", int2str(length(features_training(:,1))), " patients \n\r"));
 fprintf(fileid, strcat("Tested on ", int2str(length(features_holdout1(:,1)))," patients \n\r"));
-fprintf(fileid, strcat("View: ", view{:}, '\n\r'));
-fprintf(fileid, strcat("ROIs Analyzed: ", experiment_type, '\n\r'));
 fprintf(fileid, strcat("Selection Method: ", params.fsname, '\n\r'));
 fprintf(fileid, strcat("Classifier: ", params.classifier, '\n\r'));
 fprintf(fileid, strcat("Number of Top Features: ", num2str(params.num_top_feats), '\n\r'));
@@ -351,9 +316,3 @@ function results = compute_metrics(prediction, groundtruth)
     results.MCC = round(MCC, 3);
 
 end
-
-
-
-
-
-

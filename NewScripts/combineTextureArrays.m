@@ -2,16 +2,20 @@ clc;
 clear;
 close all;
 
-view = "Coronal";
-plane = 'cor';
-roi = "ProxFat10";
-region = 'proxfat10';
+view = "Axial";
+plane = 'ax';
+roi = "ProxFat15";
+region = 'proxfat15';
 
-root_path = "/Volumes/Crucial X6/CombineTexture/";
+root_path = "/Users/leobao/Documents/MultiPlanePipeline/";
 
-matlab_input_path = strcat(root_path, view, '_', roi, '_Matlab/');
-python_input_path = strcat(root_path, view, '_', roi, '_Python/');
-output_path = strcat(root_path, view, '_', roi, '/');
+matlab_input_path = strcat(root_path, 'UpdatedTexture/', view, '_', roi, '/');
+python_input_path = strcat(root_path, 'CollageReshaped/', view, '_', roi, '/');
+output_path = strcat(root_path, 'CombinedTexture/', view, '_', roi, '/');
+
+if(~exist(output_path, "dir"))
+    mkdir(output_path);
+end
 
 % Get a list of .mat files in the directory
 patient_list = dir(fullfile(python_input_path, 'Feats_Col_Patient-*.mat'));

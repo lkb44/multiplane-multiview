@@ -3,7 +3,7 @@ import numpy as np
 import re
 
 input_directory = "/Volumes/Crucial X6/CollageFeatures/Axial_Fat/"
-output_directory = "/Volumes/Crucial X6/CollageFeatures/Axial_Fat_Single/"
+output_directory = "/Users/leobao/Documents/MultiPlanePipeline/CollageReshaped/Axial_Fat/"
 if not os.path.exists(output_directory):
     os.makedirs(output_directory)
 

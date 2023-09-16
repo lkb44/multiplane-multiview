@@ -1,7 +1,7 @@
 import numpy as np
 
 # Load the 3D numpy array from the .npy file
-filename = '/Users/leobao/Documents/MultiPlanePipeline/CollageMAT/Patient-011/Patient-011_cor_label_fat_ls.npy'
+filename = '/Users/leobao/Documents/MultiPlanePipeline/CollageMAT/Patient-049/Patient-049_cor_label_fat_ls.npy'
 array_3d = np.load(filename)
 
 # Check the shape of the 3D array

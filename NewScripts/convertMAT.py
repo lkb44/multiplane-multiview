@@ -7,11 +7,11 @@ plane = 'cor'
 
 # Define the input directory and window sizes
 #input_directory = '/Volumes/Crucial X6/MP_COLLAGE/Axial_Tumor_NPY_PKL'
-input_directory = '/Volumes/Crucial X6/Resume2'
+input_directory = '/Users/leobao/Documents/MultiPlanePipeline/CollageReadytoReshape/Coronal_ProxFat10'
 window_sizes = ['3', '5', '7', '9', '11']
 
 # Define the output directory
-output_directory = '/Volumes/Crucial X6/CollageFeatures/Coronal_ProxFat15/'
+output_directory = '/Users/leobao/Documents/MultiPlanePipeline/CollageReshaped/Coronal_ProxFat10'
 if not os.path.exists(output_directory):
     os.makedirs(output_directory)
 
@@ -24,11 +24,11 @@ for file_name in os.listdir(input_directory):
             patient_id = parts[2]
 
             # Specify window file paths
-            ws3_file_name = f'Feats_Col_{patient_id}_{plane}_ls_ws_3.npy'
-            ws5_file_name = f'Feats_Col_{patient_id}_{plane}_ls_ws_5.npy'
-            ws7_file_name = f'Feats_Col_{patient_id}_{plane}_ls_ws_7.npy'
-            ws9_file_name = f'Feats_Col_{patient_id}_{plane}_ls_ws_9.npy'
-            ws11_file_name = f'Feats_Col_{patient_id}_{plane}_ls_ws_11.npy'
+            ws3_file_name = f'Feats_Col_{patient_id}_{plane}_ws_3.npy'
+            ws5_file_name = f'Feats_Col_{patient_id}_{plane}_ws_5.npy'
+            ws7_file_name = f'Feats_Col_{patient_id}_{plane}_ws_7.npy'
+            ws9_file_name = f'Feats_Col_{patient_id}_{plane}_ws_9.npy'
+            ws11_file_name = f'Feats_Col_{patient_id}_{plane}_ws_11.npy'
 
             # Load in npy arrays for each window size
             ws3_npy_data = np.load(os.path.join(input_directory, ws3_file_name), allow_pickle=True).item()

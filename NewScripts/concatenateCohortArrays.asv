@@ -1,14 +1,14 @@
 clear
 clc
 
-view = "Axial";
-roi = "Tumor";
+view = "Best";
+roi = "Fat";
 cohort = "Training";
 
-root_path = "/Volumes/Crucial X6/CombineTexture/";
+root_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollage/";
 
-input_path = strcat(root_path, view, '_', roi, '_', cohort, '/');
-output_path = strcat(root_path, view, roi, '_', cohort, '.mat');
+input_path = strcat(root_path, view, '_', roi, '/', cohort, '/');
+output_path = strcat(root_path, view, '_', roi, '_', cohort, '.mat');
 
 % Get a list of .mat files in the directory
 file_list = dir(fullfile(input_path, 'Patient-*.mat'));
@@ -30,6 +30,12 @@ feature_matrix = [];
 
 for i = 1 : length(patient_ids_string)
 
-    patient_path = strcat(input_path, patient_ids_string{i},)
+    patient_path = strcat(input_path, 'Patient-', patient_ids_string{i}, '.mat');
+    features = load(patient_path);
+    features = features.feature_matrix;
+
+    feature_matrix = [feature_matrix; features];
 
 end
+
+save(output_path, "feature_matrix");

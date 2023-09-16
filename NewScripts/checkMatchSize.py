@@ -3,8 +3,8 @@ from pathlib import Path
 import numpy as np
 
 # Load the two .npy arrays
-mask = np.load('/Users/leobao/Documents/MultiPlanePipeline/CollageMAT/Patient-011/Patient-011_cor_label_fat_ls.npy')
-image = np.load('/Users/leobao/Documents/MultiPlanePipeline/CollageMAT/Patient-011/Patient-011_cor_ls.npy')
+mask = np.load('/Users/leobao/Documents/MultiPlanePipeline/CollageMAT/Patient-049/Patient-049_cor_label_fat_ls.npy')
+image = np.load('/Users/leobao/Documents/MultiPlanePipeline/CollageMAT/Patient-049/Patient-049_cor_ls.npy')
 
 # Get the dimensions of each array
 mask_dim = mask.shape

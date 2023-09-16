@@ -12,32 +12,44 @@ if isunix
 end
 %% Specify dataset information
 view = {'Coronal'}; % {Can only be 'Axial'}, {'Coronal'} or {'Axial','Coronal'}
-rois = {'Tumor'};
+rois = {'Proximal_Fat5'};
 scheme = {'mrmr_svm'}; % {'wilcoxon_qda'}, {'wilcoxon_rf'}, {'mrmr_qda'}, or {'mrmr_rf'}
-split = {'TRG_80_20_T_27_Split'};
+split = {'missingCollage'};
 
 if strcmp(rois, "Proximal_Fat5")
     experiment_type = 'proxfat5_only';
+    region = 'ProxFat5';
 elseif strcmp(rois, "Proximal_Fat10")
     experiment_type = 'proxfat10_only';
+    region = 'ProxFat10';
 elseif strcmp(rois, "Proximal_Fat15")
     experiment_type = 'proxfat15_only';
+    region = 'ProxFat15';
 elseif strcmp(rois, "Fat")
     experiment_type = 'fat_only';
+    region = 'Fat';
 elseif strcmp(rois, "Tumor")
     experiment_type = 'tumor_only';
+    region = 'Tumor';
 end
 % Print experiment types
 fprintf(strcat("USING THE FOLLOWING VIEW(S): ", strjoin(view), "\n"));
 fprintf("EXPERIMENT TYPE: %s \n", experiment_type);
 %% Specify paths to ground truth labels
-training_label_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/train_test_labels/TRG(80:20):T(27) Labels/train_labels.csv";
-testing1_label_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/train_test_labels/TRG(80:20):T(27) Labels/test1_labels.csv';
-testing2_label_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/train_test_labels/TRG(80:20):T(27) Labels/test2_labels.csv';
-train_matrix_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/TRG_80_20_T_27_Split/Training/CoronalTextureFeatures/Tumor_Training.mat";
-test1_matrix_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/TRG_80_20_T_27_Split/Testing1/CoronalTextureFeatures/Tumor_Testing1.mat";
-test2_matrix_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/TRG_80_20_T_27_Split/Testing2/CoronalTextureFeatures/Tumor_Testing2.mat";
+label_path_root = '/Users/leobao/Documents/MultiPlanePipeline/Data/train_test_labels/MissingCollageLabels/';
+matrix_path_root = '/Users/leobao/Documents/MultiPlanePipeline/CombinedTexture/';
 
+training_label_path = string(strcat(label_path_root, view, '_', region, '/train_labels.csv'));
+testing1_label_path = string(strcat(label_path_root, view, '_', region, '/test1_labels.csv'));
+testing2_label_path = string(strcat(label_path_root, view, '_', region, '/test2_labels.csv'));
+
+train_matrix_path = strcat(matrix_path_root, view, '_', region, '_Training.mat');
+test1_matrix_path = strcat(matrix_path_root, view, '_', region, '_Testing1.mat');
+test2_matrix_path = strcat(matrix_path_root, view, '_', region, '_Testing2.mat');
+
+path_to_train = string(train_matrix_path);
+path_to_test1 = string(test1_matrix_path);
+path_to_test2 = string(test2_matrix_path);
 
 feature_column_path = '/Users/leobao/Documents/MultiPlanePipeline/Feature_Names/Texture_Feature_Names.xlsx';
 feature_column_names = readtable(feature_column_path, 'ReadVariableNames',false);
@@ -48,10 +60,10 @@ fprintf("Got directory paths to feature matrices! \n");
 %% Create output directory
 
 
-output_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/TRG_80_20_T_27_Split/Results/";
-experiment_date = strrep(string(datetime(now,'ConvertFrom','datenum')), " ", "_");
+output_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/";
+experiment_date = strrep(string(datetime("now")), " ", "_");
 experiment_date = strrep(experiment_date, ":", "_");
-output_path = strcat(output_path, experiment_date, "_", view, "_", split, "_", experiment_type, "_", scheme, "/");
+output_path = strcat(output_path, experiment_date, "_", view, "_", experiment_type, "_", scheme, "/");
 if(~exist(output_path, "dir"))
     mkdir(output_path);
 end
@@ -59,74 +71,9 @@ end
 fprintf("Created output directory for this experiment! \n");
 
 %% Load in datasets
-
 datasets = struct;
 
-train_matrices = dir(fullfile(train_matrix_path));
-train = {train_matrices.name};
-
-fat_train = find(contains(train,'Coronal_Fat'));
-proxfat5_train = find(contains(train,'_ProxFat5'));
-proxfat10_train = find(contains(train,'_ProxFat10'));
-proxfat15_train = find(contains(train,'_ProxFat15'));
-tumor_train = find(contains(train,'_Tumor'));
-
-test1_matrices = dir(fullfile(test1_matrix_path));
-test1 = {test1_matrices.name};
-
-test2_matrices = dir(fullfile(test2_matrix_path));
-test2 = {test2_matrices.name};
-
-fat_test1 = find(contains(test1,'Coronal_Fat'));
-proxfat5_test1 = find(contains(test1,'_ProxFat5'));
-proxfat10_test1 = find(contains(test1,'_ProxFat10'));
-proxfat15_test1 = find(contains(test1,'_ProxFat15'));
-tumor_test1 = find(contains(test1,'_Tumor'));
-
-fat_test2 = find(contains(test2,'Coronal_Fat'));
-proxfat5_test2 = find(contains(test2,'_ProxFat5'));
-proxfat10_test2 = find(contains(test2, '_ProxFat10'));
-proxfat15_test2 = find(contains(test2,'_ProxFat15'));
-tumor_test2 = find(contains(test2,'_Tumor'));
-
 for i = 1:length(rois)
-    if strcmp(rois(i), 'Fat')
-        path_to_train = strcat(train_matrix_path, train{fat_train});
-    end
-    if strcmp(rois(i), 'Proximal_Fat5')
-        path_to_train = strcat(train_matrix_path, train{proxfat5_train});
-    end
-    if strcmp(rois(i), 'Proximal_Fat10')
-        path_to_train = strcat(train_matrix_path, train{proxfat10_train});
-    end
-    if strcmp(rois(i), 'Proximal_Fat15')
-        path_to_train = strcat(train_matrix_path, train{proxfat15_train});
-    end
-    if strcmp(rois(i), 'Tumor')
-        path_to_train = train_matrix_path;
-    end
-
-    if strcmp(rois(i), 'Fat')
-        path_to_test1 = strcat(test1_matrix_path, test1{fat_test1});
-        path_to_test2 = strcat(test2_matrix_path, test2{fat_test2});
-    end
-    if strcmp(rois(i), 'Proximal_Fat5')
-        path_to_test1 = strcat(test1_matrix_path, test1{proxfat5_test1});
-        path_to_test2 = strcat(test2_matrix_path, test2{proxfat5_test2});
-    end
-    if strcmp(rois(i), 'Proximal_Fat10')
-        path_to_test1 = strcat(test1_matrix_path, test1{proxfat10_test1});
-        path_to_test2 = strcat(test2_matrix_path, test2{proxfat10_test2});
-    end
-    if strcmp(rois(i), 'Proximal_Fat15')
-        path_to_test1 = strcat(test1_matrix_path, test1{proxfat15_test1});
-        path_to_test2 = strcat(test2_matrix_path, test2{proxfat15_test2});
-    end
-    if strcmp(rois(i), 'Tumor')
-        path_to_test1 = test1_matrix_path;
-        path_to_test2 = test2_matrix_path;
-    end
-
     datasets.(strcat("train_",rois{i})) = load(path_to_train);
     datasets.(strcat("test1_",rois{i})) = load(path_to_test1);
     datasets.(strcat("test2_",rois{i})) = load(path_to_test2);
@@ -181,6 +128,103 @@ features_training = whitenData(features_training, 'simple');
 features_holdout1 = whitenData(features_holdout1, 'simple');
 features_holdout2 = whitenData(features_holdout2, 'simple');
 
+% if strcmp(rois(i), 'Proximal_Fat5')
+%     nan_vector_train = features_training(1, :);
+%     nan_indices_train = find(~isnan(nan_vector_train));
+%     features_training = features_training(:, nan_indices_train);
+%     features_holdout1 = features_holdout1(:, nan_indices_train);
+%     features_holdout2 = features_holdout2(:, nan_indices_train);
+%     feature_column_names = feature_column_names(:, nan_indices_train);
+%     nan_vector_test1 = features_holdout1(1, :);
+%     nan_indices_test1 = find(~isnan(nan_vector_test1));
+%     features_training = features_training(:, nan_indices_test1);
+%     features_holdout1 = features_holdout1(:, nan_indices_test1);
+%     features_holdout2 = features_holdout2(:, nan_indices_test1);
+%     feature_column_names = feature_column_names(:, nan_indices_test1);
+%     nan_vector_test2 = features_holdout2(1, :);
+%     nan_indices_test2 = find(~isnan(nan_vector_test2));
+%     features_training = features_training(:, nan_indices_test2);
+%     features_holdout1 = features_holdout1(:, nan_indices_test2);
+%     features_holdout2 = features_holdout2(:, nan_indices_test2);
+%     feature_column_names = feature_column_names(:, nan_indices_test2);
+% elseif strcmp(rois(i), 'Proximal_Fat10')
+%     nan_vector_train = features_training(1, :);
+%     nan_indices_train = find(~isnan(nan_vector_train));
+%     features_training = features_training(:, nan_indices_train);
+%     features_holdout1 = features_holdout1(:, nan_indices_train);
+%     features_holdout2 = features_holdout2(:, nan_indices_train);
+%     feature_column_names = feature_column_names(:, nan_indices_train);
+%     nan_vector_test1 = features_holdout1(1, :);
+%     nan_indices_test1 = find(~isnan(nan_vector_test1));
+%     features_training = features_training(:, nan_indices_test1);
+%     features_holdout1 = features_holdout1(:, nan_indices_test1);
+%     features_holdout2 = features_holdout2(:, nan_indices_test1);
+%     feature_column_names = feature_column_names(:, nan_indices_test1);
+%     nan_vector_test2 = features_holdout2(1, :);
+%     nan_indices_test2 = find(~isnan(nan_vector_test2));
+%     features_training = features_training(:, nan_indices_test2);
+%     features_holdout1 = features_holdout1(:, nan_indices_test2);
+%     features_holdout2 = features_holdout2(:, nan_indices_test2);
+%     feature_column_names = feature_column_names(:, nan_indices_test2);
+% elseif strcmp(rois(i), 'Proximal_Fat15')
+%     nan_vector_train = features_training(1, :);
+%     nan_indices_train = find(~isnan(nan_vector_train));
+%     features_training = features_training(:, nan_indices_train);
+%     features_holdout1 = features_holdout1(:, nan_indices_train);
+%     features_holdout2 = features_holdout2(:, nan_indices_train);
+%     feature_column_names = feature_column_names(:, nan_indices_train);
+%     nan_vector_test1 = features_holdout1(1, :);
+%     nan_indices_test1 = find(~isnan(nan_vector_test1));
+%     features_training = features_training(:, nan_indices_test1);
+%     features_holdout1 = features_holdout1(:, nan_indices_test1);
+%     features_holdout2 = features_holdout2(:, nan_indices_test1);
+%     feature_column_names = feature_column_names(:, nan_indices_test1);
+%     nan_vector_test2 = features_holdout2(1, :);
+%     nan_indices_test2 = find(~isnan(nan_vector_test2));
+%     features_training = features_training(:, nan_indices_test2);
+%     features_holdout1 = features_holdout1(:, nan_indices_test2);
+%     features_holdout2 = features_holdout2(:, nan_indices_test2);
+%     feature_column_names = feature_column_names(:, nan_indices_test2);
+% elseif strcmp(rois(i), 'Fat')
+%     nan_vector_train = features_training(1, :);
+%     nan_indices_train = find(~isnan(nan_vector_train));
+%     features_training = features_training(:, nan_indices_train);
+%     features_holdout1 = features_holdout1(:, nan_indices_train);
+%     features_holdout2 = features_holdout2(:, nan_indices_train);
+%     feature_column_names = feature_column_names(:, nan_indices_train);
+%     nan_vector_test1 = features_holdout1(1, :);
+%     nan_indices_test1 = find(~isnan(nan_vector_test1));
+%     features_training = features_training(:, nan_indices_test1);
+%     features_holdout1 = features_holdout1(:, nan_indices_test1);
+%     features_holdout2 = features_holdout2(:, nan_indices_test1);
+%     feature_column_names = feature_column_names(:, nan_indices_test1);
+%     nan_vector_test2 = features_holdout2(1, :);
+%     nan_indices_test2 = find(~isnan(nan_vector_test2));
+%     features_training = features_training(:, nan_indices_test2);
+%     features_holdout1 = features_holdout1(:, nan_indices_test2);
+%     features_holdout2 = features_holdout2(:, nan_indices_test2);
+%     feature_column_names = feature_column_names(:, nan_indices_test2);
+% elseif strcmp(rois(i), 'Tumor')
+%     nan_vector_train = features_training(1, :);
+%     nan_indices_train = find(~isnan(nan_vector_train));
+%     features_training = features_training(:, nan_indices_train);
+%     features_holdout1 = features_holdout1(:, nan_indices_train);
+%     features_holdout2 = features_holdout2(:, nan_indices_train);
+%     feature_column_names = feature_column_names(:, nan_indices_train);
+%     nan_vector_test1 = features_holdout1(1, :);
+%     nan_indices_test1 = find(~isnan(nan_vector_test1));
+%     features_training = features_training(:, nan_indices_test1);
+%     features_holdout1 = features_holdout1(:, nan_indices_test1);
+%     features_holdout2 = features_holdout2(:, nan_indices_test1);
+%     feature_column_names = feature_column_names(:, nan_indices_test1);
+%     nan_vector_test2 = features_holdout2(1, :);
+%     nan_indices_test2 = find(~isnan(nan_vector_test2));
+%     features_training = features_training(:, nan_indices_test2);
+%     features_holdout1 = features_holdout1(:, nan_indices_test2);
+%     features_holdout2 = features_holdout2(:, nan_indices_test2);
+%     feature_column_names = feature_column_names(:, nan_indices_test2);
+% end
+
 fprintf("Whitened the training and holdout testing datasets successfully! \n");
 
 %% Initialize classifier params for classifier
@@ -223,7 +267,7 @@ end
 %% Create experimental log
 log_file_name = strcat(output_path, "Summary_of_Experiment_", experiment_date, ".txt");
 fileid = fopen(log_file_name,'w');
-fprintf(fileid, strcat("Experiment Date and Time: ", string(datetime(now,'ConvertFrom','datenum')), '\n\r'));
+fprintf(fileid, strcat("Experiment Date and Time: ", string(datetime("now")), '\n\r'));
 fprintf(fileid, strcat("USING THE FOLLOWING VIEW(S): ", strjoin(view), "\n"));
 fprintf(fileid, "EXPERIMENT TYPE: %s \n", experiment_type);
 fprintf(fileid, "FEATURE FAMILY: 3D Shape \n");
