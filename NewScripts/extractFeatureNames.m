@@ -1,4 +1,11 @@
-top_feature_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/13-Sep-2023_16_46_13_Axial_proxfat10_only_wilcoxon_qda/Top_Features_Information.mat';
+% Prompt the user to enter the top_feature_path
+top_feature_path = input('Enter the pathname for top features: ', 's');
+
+% Check if the input pathname is valid
+if ~exist(top_feature_path, 'file')
+    error('The specified file does not exist.');
+end
+
 feature_column_path = '/Users/leobao/Documents/MultiPlanePipeline/Feature_Names/Texture_Feature_Names.xlsx';
 feature_column_names = readtable(feature_column_path, 'ReadVariableNames',false);
 feature_column_names = table2cell(feature_column_names);
@@ -14,13 +21,13 @@ for i = 1:5
     top5_feature_names(i) = feature_column_names(index);
 end
 
-disp(top5_feature_names)
+% Convert the cell array to a string array
+top5_feature_names_str = string(top5_feature_names);
 
-% output_path = '';
-% if(~exist(output_path, "dir"))
-%     mkdir(output_path);
-% end
-% 
-% feature_file_name = string(strcat(output_path, 'top5_features.xlsx'));
-% feature_table = cell2table(feature_column_names);
-% writetable(feature_table, feature_file_name);
+% Remove brackets and single quotes
+top5_feature_names_str = replace(top5_feature_names_str, '{', '');
+top5_feature_names_str = replace(top5_feature_names_str, '}', '');
+top5_feature_names_str = strtrim(top5_feature_names_str);
+
+% Display the formatted output
+disp(top5_feature_names_str)
