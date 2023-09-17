@@ -6,7 +6,7 @@ if ~exist(top_feature_path, 'file')
     error('The specified file does not exist.');
 end
 
-feature_column_path = '/Users/leobao/Documents/MultiPlanePipeline/Feature_Names/Texture_Feature_Names.xlsx';
+feature_column_path = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/15-Sep-2023_15_22_06_Multi-Region_mrmr_lda/top20_features.xlsx';
 feature_column_names = readtable(feature_column_path, 'ReadVariableNames',false);
 feature_column_names = table2cell(feature_column_names);
 
@@ -19,11 +19,15 @@ top5_feature_names = cell(5, 1);
 for i = 1:5
     index = top_indices(i);
     if index >= 1 && index <= 5
-        new_name = ['Axial_ProxFat10_', feature_column_names(index)];
+        new_name = string(strcat('Axial_ProxFat10_', feature_column_names(index)));
     elseif index >= 6 && index <= 10
-        
+        new_name = string(strcat('Coronal_ProxFat10_', feature_column_names(index)));
+    elseif index >= 11 && index <= 15
+        new_name = string(strcat('Axial_Tumor_', feature_column_names(index)));
+    elseif index >= 16 && index <= 20
+        new_name = string(strcat('Coronal_Tumor_', feature_column_names(index)));
     end
-    top5_feature_names(i) = feature_column_names(index);
+    top5_feature_names{i} = string(new_name);
 end
 
 
