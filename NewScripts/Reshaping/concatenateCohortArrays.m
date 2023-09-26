@@ -1,12 +1,12 @@
 clear
 clc
 
-view = "Multi-Region";
-roi = "Fat";
+view = "MPMR";
+roi = "ProxFat10";
 cohort = "Testing2";
-plane = "Coronal";
+plane = "Axial";
 
-root_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollage/Multi-Region/";
+root_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollage/MPMR/";
 
 input_path = strcat(root_path, roi, '/', plane, '/', cohort, '/');
 output_path = strcat(root_path, view, '_', plane, '_', roi, '_', cohort, '.mat');

@@ -13,7 +13,7 @@ end
 %% Specify dataset information
 view = {'Coronal'}; % {Can only be 'Axial'}, {'Coronal'} or {'Axial','Coronal'}
 rois = {'Proximal_Fat5'};
-scheme = {'mrmr_svm'}; % {'wilcoxon_qda'}, {'wilcoxon_rf'}, {'mrmr_qda'}, or {'mrmr_rf'}
+scheme = {'mrmr_qda'}; % {'wilcoxon_qda'}, {'wilcoxon_rf'}, {'mrmr_qda'}, or {'mrmr_rf'}
 split = {'missingCollage'};
 
 if strcmp(rois, "Proximal_Fat5")

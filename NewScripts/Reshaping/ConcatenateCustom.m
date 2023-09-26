@@ -1,15 +1,8 @@
 clear
 clc
 
-view = "Multi-Region";
-roi = "ProxFat5";
-cohort = "Testing2";
-plane = "Coronal";
-
-root_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollage/MPMR/";
-
-input_path = strcat(root_path, roi, '/', plane, '/', cohort, '/');
-output_path = strcat(root_path, view, '_', plane, '_', roi, '_', cohort, '.mat');
+input_path = '/Users/leobao/Documents/MultiPlanePipeline/CombinedTexture/Axial_Tumor/Testing1/HighFrequency/';
+output_path = '/Users/leobao/Documents/MultiPlanePipeline/CombinedTexture/Axial_Tumor/Testing1/HighFrequency/Axial_Tumor_Testing1.mat';
 
 % Get a list of .mat files in the directory
 file_list = dir(fullfile(input_path, 'Patient-*.mat'));
