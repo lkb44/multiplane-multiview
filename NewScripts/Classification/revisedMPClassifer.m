@@ -1,20 +1,23 @@
 clear;close all;clc;
 
 if isunix
-    addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/2D_Shape_Feature_Extraction_Code/scripts/general'));
-    addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/2D_Shape_Feature_Extraction_Code/scripts/classification/nFold_cross_validation/'));
-    addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/2D_Shape_Feature_Extraction_Code/scripts/classification/training_and_testing_sets/'));
-    addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/2D_Shape_Feature_Extraction_Code/scripts/classification/classifiers/'));
-    addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/2D_Shape_Feature_Extraction_Code/scripts/feature_selection/mrmr_feature_select/'));
+    addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/scripts/general/'));
+    addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/scripts/classification/nFold_cross_validation/'));
+    addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/scripts/classification/training_and_testing_sets/'));
+    addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/scripts/classification/classifiers/'));
+    addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/scripts/feature_selection/mrmr_feature_select/'));
+    addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/scripts/'));
     addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/Feature_Selection_Classification_Code/Feature_Classifier/'));
     addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/Scripts-DataPreProcessing/Util-preProcessing'));
     addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/2D_Shape_Feature_Extraction_Code/scripts/feature_selection/mrmr_feature_select/estpab.mexmac'));
+    % addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/'));
+    % addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/scripts/feature_selection/mrmr_feature_select/mrmr_mid_d.m'))
 end
 region = {'MPMR'}; % Can be 'best_fat' or 'best_tumor'
 split = {'missingCollage'};
 scheme = {'mrmr_qda'};
 
-results_root = '/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/';
+results_root = '/Volumes/Crucial X6/data copy/Data/MissingCollageResults/';
 experiments = dir(fullfile(results_root));
 theFilesvol = {experiments.name};
 
