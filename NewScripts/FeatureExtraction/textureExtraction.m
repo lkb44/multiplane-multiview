@@ -1,6 +1,7 @@
 clc;
 clear;
 close all;
+
 addpath(genpath('/Users/leobao/Library/CloudStorage/GoogleDrive-lkb44@case.edu/Shared drives/INVent/tom/Conferences/2022-SPIE/Resampling'));
 addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/2D_Shape_Feature_Extraction_Code/scripts/mha'));
 addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/2D_Shape_Feature_Extraction_Code/scripts/feature_extraction/subfunctions'))
@@ -11,11 +12,12 @@ addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/2D_Shape_F
 addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/2D_Shape_Feature_Extraction_Code/scripts/feature_extraction/collage'));
 addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/2D_Shape_Feature_Extraction_Code/scripts/feature_extraction'));
 
-path_data = '/Volumes/Crucial X6/ReExtraction/Current/Patient-*';
 
-pathIn = '/Volumes/Crucial X6/ReExtraction/Current/';
+path_data = '/Users/leobao/Documents/MultiPlanePipeline/AACR2023/ValidationData/Axial/Patient-*';
+
+pathIn = '/Users/leobao/Documents/MultiPlanePipeline/AACR2023/ValidationData/Axial/';
 path = path_data;
-pathOut= '/Volumes/Crucial X6/ReExtraction/CoronalTraining_TextureFeatures/';
+pathOut= '/Users/leobao/Documents/MultiPlanePipeline/AACR2023/TextureFeatures/Axial/';
 
 regions = {'tumor'};
 
@@ -118,6 +120,3 @@ for k = 1:length(theFilesvol)
     end
     
 end
-
-
-

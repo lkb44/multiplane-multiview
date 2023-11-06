@@ -1,16 +1,64 @@
-import os
-import numpy as np
+import medviz as viz
+from pathlib import Path
 from scipy import io
+import numpy as np
+import os
+import re
 
-ROI = 'ProxFat10'
-roi = 'proxfat10'
+
+ROI = 'Fat'
+roi = 'fat'
 PLANE = 'Axial'
 plane = 'ax'
 
+dir_path = '/Users/leobao/Documents/MultiPlanePipeline/AACR2023/ResumeNPY/' + PLANE + '/'
 out_dir_path = '/Users/leobao/Documents/MultiPlanePipeline/AACR2023/CollageFeatures/' + PLANE + '/'
+
+image_dir_path = dir_path + 'Image/'
+mask_dir_path = dir_path + ROI + '/'
 
 patient_data = {}
 window_sizes = ['3', '5', '7', '9', '11']
+
+for filename in os.listdir(image_dir_path):
+    if not filename.startswith('.'):  # Exclude hidden files
+        patient_id = re.search(r'Patient-(\d+)', filename).group(1)
+        image_path = image_dir_path + 'Patient-' + patient_id + '_' + plane + '_ls.npy'
+        mask_path = mask_dir_path + 'Patient-' + patient_id + '_' + plane + '_label_' + roi + '_ls.npy'
+        out_path = out_dir_path + ROI
+        file_name = 'Patient-' + patient_id + '_' + plane
+
+        # Load the two .npy arrays
+        mask = np.load(mask_path)
+        image = np.load(image_path)
+
+        # Get the dimensions of each array
+        mask_dim = mask.shape
+        image_dim = image.shape
+
+
+        # Check if the dimensions match
+        if mask_dim == image_dim:
+            print("The dimensions of both arrays match.")
+            print("Extracting collage features from Patient-" + patient_id) 
+            image, mask = viz.read_image_mask(image = image_path, mask = mask_path)
+            viz.feats.collage2d(image, mask, window_sizes = [3, 5, 7, 9, 11], save_path = out_path, out_name = file_name)
+
+        else:
+            print("The dimensions of the arrays do not match. Attempting to convert 3D to 2D.")
+
+            array_3d = np.load(mask_path)
+            # Extract the 2D array from the 3D array
+            array_2d = array_3d[0]
+
+            # Save the 2D array back over the original file
+            np.save(mask_path, array_2d)
+
+            print("Conversion complete and saved to the original file. Now attempting to extract features")
+            image, mask = viz.read_image_mask(image = image_path, mask = mask_path)
+            viz.feats.collage2d(image, mask, window_sizes = [3, 5, 7, 9, 11], save_path = out_path, out_name = file_name)
+
+print("Features extracted into .npy and .pkl format. Combining window sizes and converting to .mat now.")
 
 npy_path = out_dir_path + ROI
 mat_path = '/Users/leobao/Documents/MultiPlanePipeline/AACR2023/CollageFeaturesMAT/' + PLANE + '/' + ROI + '/'
