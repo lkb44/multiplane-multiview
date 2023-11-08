@@ -7,14 +7,13 @@ if isunix
     addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/2D_Shape_Feature_Extraction_Code/scripts/classification/classifiers/'));
     addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/2D_Shape_Feature_Extraction_Code/scripts/feature_selection/mrmr_feature_select/'));
     addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/Feature_Selection_Classification_Code/Feature_Classifier/'));
-    addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/Scripts-DataPreProcessing/Util-preProcessing'));
+    addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/multiplane-multiview/Old-SPIE/Feature_Selection_Classification_Code/Feature_Classifier/'));
     % addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/2D_Shape_Feature_Extraction_Code/scripts/feature_selection/mrmr_feature_select/estpab.mexmac'));
 end
 %% Specify dataset information
 view = {'Coronal'}; % {Can only be 'Axial'}, {'Coronal'} or {'Axial','Coronal'}
-rois = {'Proximal_Fat5'};
-scheme = {'mrmr_qda'}; % {'wilcoxon_qda'}, {'wilcoxon_rf'}, {'mrmr_qda'}, or {'mrmr_rf'}
-split = {'missingCollage'};
+rois = {'Proximal_Fat10'};
+scheme = {'wilcoxon_rf'}; % {'wilcoxon_qda'}, {'wilcoxon_rf'}, {'mrmr_qda'}, or {'mrmr_rf'}
 
 if strcmp(rois, "Proximal_Fat5")
     experiment_type = 'proxfat5_only';
@@ -36,16 +35,16 @@ end
 fprintf(strcat("USING THE FOLLOWING VIEW(S): ", strjoin(view), "\n"));
 fprintf("EXPERIMENT TYPE: %s \n", experiment_type);
 %% Specify paths to ground truth labels
-label_path_root = '/Users/leobao/Documents/MultiPlanePipeline/Data/train_test_labels/MissingCollageLabels/';
-matrix_path_root = '/Users/leobao/Documents/MultiPlanePipeline/CombinedTexture/';
+label_path_root = '/Users/leobao/Documents/MultiPlanePipeline/AACR2023/Labels/';
+matrix_path_root = '/Users/leobao/Documents/MultiPlanePipeline/AACR2023/';
 
 training_label_path = string(strcat(label_path_root, view, '_', region, '/train_labels.csv'));
 testing1_label_path = string(strcat(label_path_root, view, '_', region, '/test1_labels.csv'));
 testing2_label_path = string(strcat(label_path_root, view, '_', region, '/test2_labels.csv'));
 
-train_matrix_path = strcat(matrix_path_root, view, '_', region, '_Training.mat');
-test1_matrix_path = strcat(matrix_path_root, view, '_', region, '_Testing1.mat');
-test2_matrix_path = strcat(matrix_path_root, view, '_', region, '_Testing2.mat');
+train_matrix_path = strcat(matrix_path_root, 'TrainingTextureFeatures/', view, '_', region, '_Training.mat');
+test1_matrix_path = strcat(matrix_path_root, 'Validation1TextureFeatures/', view, '_', region, '_Validation1.mat');
+test2_matrix_path = strcat(matrix_path_root, 'Validation2TextureFeatures/', view, '_', region, '_Validation2.mat');
 
 path_to_train = string(train_matrix_path);
 path_to_test1 = string(test1_matrix_path);
@@ -60,7 +59,7 @@ fprintf("Got directory paths to feature matrices! \n");
 %% Create output directory
 
 
-output_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/MissingCollageResults/";
+output_path = "/Users/leobao/Documents/MultiPlanePipeline/AACR2023/Results/";
 experiment_date = strrep(string(datetime("now")), " ", "_");
 experiment_date = strrep(experiment_date, ":", "_");
 output_path = strcat(output_path, experiment_date, "_", view, "_", experiment_type, "_", scheme, "/");
@@ -119,121 +118,139 @@ end
 
 holdout_test_size1 = size(features_holdout1);
 holdout_test_size2 = size(features_holdout2);
-assert(holdout_test_size1(1) == 15, "The size of the dataset is incorrect!");
-assert(holdout_test_size2(1) == 26, "The size of the dataset is incorrect!");
+assert(holdout_test_size1(1) == 27, "The size of the dataset is incorrect!");
+assert(holdout_test_size2(1) == 36, "The size of the dataset is incorrect!");
 
 fprintf("Loaded in train and holdout testing datasets! \n");
+
+if strcmp(rois(i), 'Proximal_Fat5')
+    nan_vector_train = features_training(1, :);
+    nan_indices_train = find(~isnan(nan_vector_train));
+    features_training = features_training(:, nan_indices_train);
+    features_holdout1 = features_holdout1(:, nan_indices_train);
+    features_holdout2 = features_holdout2(:, nan_indices_train);
+    feature_column_names = feature_column_names(:, nan_indices_train);
+    nan_vector_test1 = features_holdout1(1, :);
+    nan_indices_test1 = find(~isnan(nan_vector_test1));
+    features_training = features_training(:, nan_indices_test1);
+    features_holdout1 = features_holdout1(:, nan_indices_test1);
+    features_holdout2 = features_holdout2(:, nan_indices_test1);
+    feature_column_names = feature_column_names(:, nan_indices_test1);
+    nan_vector_test2 = features_holdout2(1, :);
+    nan_indices_test2 = find(~isnan(nan_vector_test2));
+    features_training = features_training(:, nan_indices_test2);
+    features_holdout1 = features_holdout1(:, nan_indices_test2);
+    features_holdout2 = features_holdout2(:, nan_indices_test2);
+    feature_column_names = feature_column_names(:, nan_indices_test2);
+elseif strcmp(rois(i), 'Proximal_Fat10')
+    nan_vector_train = features_training(1, :);
+    nan_indices_train = find(~isnan(nan_vector_train));
+    features_training = features_training(:, nan_indices_train);
+    features_holdout1 = features_holdout1(:, nan_indices_train);
+    features_holdout2 = features_holdout2(:, nan_indices_train);
+    feature_column_names = feature_column_names(:, nan_indices_train);
+    nan_vector_test1 = features_holdout1(1, :);
+    nan_indices_test1 = find(~isnan(nan_vector_test1));
+    features_training = features_training(:, nan_indices_test1);
+    features_holdout1 = features_holdout1(:, nan_indices_test1);
+    features_holdout2 = features_holdout2(:, nan_indices_test1);
+    feature_column_names = feature_column_names(:, nan_indices_test1);
+    nan_vector_test2 = features_holdout2(1, :);
+    nan_indices_test2 = find(~isnan(nan_vector_test2));
+    features_training = features_training(:, nan_indices_test2);
+    features_holdout1 = features_holdout1(:, nan_indices_test2);
+    features_holdout2 = features_holdout2(:, nan_indices_test2);
+    feature_column_names = feature_column_names(:, nan_indices_test2);
+elseif strcmp(rois(i), 'Proximal_Fat15')
+    nan_vector_train = features_training(1, :);
+    nan_indices_train = find(~isnan(nan_vector_train));
+    features_training = features_training(:, nan_indices_train);
+    features_holdout1 = features_holdout1(:, nan_indices_train);
+    features_holdout2 = features_holdout2(:, nan_indices_train);
+    feature_column_names = feature_column_names(:, nan_indices_train);
+    nan_vector_test1 = features_holdout1(1, :);
+    nan_indices_test1 = find(~isnan(nan_vector_test1));
+    features_training = features_training(:, nan_indices_test1);
+    features_holdout1 = features_holdout1(:, nan_indices_test1);
+    features_holdout2 = features_holdout2(:, nan_indices_test1);
+    feature_column_names = feature_column_names(:, nan_indices_test1);
+    nan_vector_test2 = features_holdout2(1, :);
+    nan_indices_test2 = find(~isnan(nan_vector_test2));
+    features_training = features_training(:, nan_indices_test2);
+    features_holdout1 = features_holdout1(:, nan_indices_test2);
+    features_holdout2 = features_holdout2(:, nan_indices_test2);
+    feature_column_names = feature_column_names(:, nan_indices_test2);
+elseif strcmp(rois(i), 'Fat')
+    nan_vector_train = features_training(1, :);
+    nan_indices_train = find(~isnan(nan_vector_train));
+    features_training = features_training(:, nan_indices_train);
+    features_holdout1 = features_holdout1(:, nan_indices_train);
+    features_holdout2 = features_holdout2(:, nan_indices_train);
+    feature_column_names = feature_column_names(:, nan_indices_train);
+    nan_vector_test1 = features_holdout1(1, :);
+    nan_indices_test1 = find(~isnan(nan_vector_test1));
+    features_training = features_training(:, nan_indices_test1);
+    features_holdout1 = features_holdout1(:, nan_indices_test1);
+    features_holdout2 = features_holdout2(:, nan_indices_test1);
+    feature_column_names = feature_column_names(:, nan_indices_test1);
+    nan_vector_test2 = features_holdout2(1, :);
+    nan_indices_test2 = find(~isnan(nan_vector_test2));
+    features_training = features_training(:, nan_indices_test2);
+    features_holdout1 = features_holdout1(:, nan_indices_test2);
+    features_holdout2 = features_holdout2(:, nan_indices_test2);
+    feature_column_names = feature_column_names(:, nan_indices_test2);
+elseif strcmp(rois(i), 'Tumor')
+    nan_vector_train = features_training(1, :);
+    nan_indices_train = find(~isnan(nan_vector_train));
+    features_training = features_training(:, nan_indices_train);
+    features_holdout1 = features_holdout1(:, nan_indices_train);
+    features_holdout2 = features_holdout2(:, nan_indices_train);
+    feature_column_names = feature_column_names(:, nan_indices_train);
+    nan_vector_test1 = features_holdout1(1, :);
+    nan_indices_test1 = find(~isnan(nan_vector_test1));
+    features_training = features_training(:, nan_indices_test1);
+    features_holdout1 = features_holdout1(:, nan_indices_test1);
+    features_holdout2 = features_holdout2(:, nan_indices_test1);
+    feature_column_names = feature_column_names(:, nan_indices_test1);
+    nan_vector_test2 = features_holdout2(1, :);
+    nan_indices_test2 = find(~isnan(nan_vector_test2));
+    features_training = features_training(:, nan_indices_test2);
+    features_holdout1 = features_holdout1(:, nan_indices_test2);
+    features_holdout2 = features_holdout2(:, nan_indices_test2);
+    feature_column_names = feature_column_names(:, nan_indices_test2);
+end
+
 %% Whiten the data
 features_training = whitenData(features_training, 'simple');
 features_holdout1 = whitenData(features_holdout1, 'simple');
 features_holdout2 = whitenData(features_holdout2, 'simple');
-
-% if strcmp(rois(i), 'Proximal_Fat5')
-%     nan_vector_train = features_training(1, :);
-%     nan_indices_train = find(~isnan(nan_vector_train));
-%     features_training = features_training(:, nan_indices_train);
-%     features_holdout1 = features_holdout1(:, nan_indices_train);
-%     features_holdout2 = features_holdout2(:, nan_indices_train);
-%     feature_column_names = feature_column_names(:, nan_indices_train);
-%     nan_vector_test1 = features_holdout1(1, :);
-%     nan_indices_test1 = find(~isnan(nan_vector_test1));
-%     features_training = features_training(:, nan_indices_test1);
-%     features_holdout1 = features_holdout1(:, nan_indices_test1);
-%     features_holdout2 = features_holdout2(:, nan_indices_test1);
-%     feature_column_names = feature_column_names(:, nan_indices_test1);
-%     nan_vector_test2 = features_holdout2(1, :);
-%     nan_indices_test2 = find(~isnan(nan_vector_test2));
-%     features_training = features_training(:, nan_indices_test2);
-%     features_holdout1 = features_holdout1(:, nan_indices_test2);
-%     features_holdout2 = features_holdout2(:, nan_indices_test2);
-%     feature_column_names = feature_column_names(:, nan_indices_test2);
-% elseif strcmp(rois(i), 'Proximal_Fat10')
-%     nan_vector_train = features_training(1, :);
-%     nan_indices_train = find(~isnan(nan_vector_train));
-%     features_training = features_training(:, nan_indices_train);
-%     features_holdout1 = features_holdout1(:, nan_indices_train);
-%     features_holdout2 = features_holdout2(:, nan_indices_train);
-%     feature_column_names = feature_column_names(:, nan_indices_train);
-%     nan_vector_test1 = features_holdout1(1, :);
-%     nan_indices_test1 = find(~isnan(nan_vector_test1));
-%     features_training = features_training(:, nan_indices_test1);
-%     features_holdout1 = features_holdout1(:, nan_indices_test1);
-%     features_holdout2 = features_holdout2(:, nan_indices_test1);
-%     feature_column_names = feature_column_names(:, nan_indices_test1);
-%     nan_vector_test2 = features_holdout2(1, :);
-%     nan_indices_test2 = find(~isnan(nan_vector_test2));
-%     features_training = features_training(:, nan_indices_test2);
-%     features_holdout1 = features_holdout1(:, nan_indices_test2);
-%     features_holdout2 = features_holdout2(:, nan_indices_test2);
-%     feature_column_names = feature_column_names(:, nan_indices_test2);
-% elseif strcmp(rois(i), 'Proximal_Fat15')
-%     nan_vector_train = features_training(1, :);
-%     nan_indices_train = find(~isnan(nan_vector_train));
-%     features_training = features_training(:, nan_indices_train);
-%     features_holdout1 = features_holdout1(:, nan_indices_train);
-%     features_holdout2 = features_holdout2(:, nan_indices_train);
-%     feature_column_names = feature_column_names(:, nan_indices_train);
-%     nan_vector_test1 = features_holdout1(1, :);
-%     nan_indices_test1 = find(~isnan(nan_vector_test1));
-%     features_training = features_training(:, nan_indices_test1);
-%     features_holdout1 = features_holdout1(:, nan_indices_test1);
-%     features_holdout2 = features_holdout2(:, nan_indices_test1);
-%     feature_column_names = feature_column_names(:, nan_indices_test1);
-%     nan_vector_test2 = features_holdout2(1, :);
-%     nan_indices_test2 = find(~isnan(nan_vector_test2));
-%     features_training = features_training(:, nan_indices_test2);
-%     features_holdout1 = features_holdout1(:, nan_indices_test2);
-%     features_holdout2 = features_holdout2(:, nan_indices_test2);
-%     feature_column_names = feature_column_names(:, nan_indices_test2);
-% elseif strcmp(rois(i), 'Fat')
-%     nan_vector_train = features_training(1, :);
-%     nan_indices_train = find(~isnan(nan_vector_train));
-%     features_training = features_training(:, nan_indices_train);
-%     features_holdout1 = features_holdout1(:, nan_indices_train);
-%     features_holdout2 = features_holdout2(:, nan_indices_train);
-%     feature_column_names = feature_column_names(:, nan_indices_train);
-%     nan_vector_test1 = features_holdout1(1, :);
-%     nan_indices_test1 = find(~isnan(nan_vector_test1));
-%     features_training = features_training(:, nan_indices_test1);
-%     features_holdout1 = features_holdout1(:, nan_indices_test1);
-%     features_holdout2 = features_holdout2(:, nan_indices_test1);
-%     feature_column_names = feature_column_names(:, nan_indices_test1);
-%     nan_vector_test2 = features_holdout2(1, :);
-%     nan_indices_test2 = find(~isnan(nan_vector_test2));
-%     features_training = features_training(:, nan_indices_test2);
-%     features_holdout1 = features_holdout1(:, nan_indices_test2);
-%     features_holdout2 = features_holdout2(:, nan_indices_test2);
-%     feature_column_names = feature_column_names(:, nan_indices_test2);
-% elseif strcmp(rois(i), 'Tumor')
-%     nan_vector_train = features_training(1, :);
-%     nan_indices_train = find(~isnan(nan_vector_train));
-%     features_training = features_training(:, nan_indices_train);
-%     features_holdout1 = features_holdout1(:, nan_indices_train);
-%     features_holdout2 = features_holdout2(:, nan_indices_train);
-%     feature_column_names = feature_column_names(:, nan_indices_train);
-%     nan_vector_test1 = features_holdout1(1, :);
-%     nan_indices_test1 = find(~isnan(nan_vector_test1));
-%     features_training = features_training(:, nan_indices_test1);
-%     features_holdout1 = features_holdout1(:, nan_indices_test1);
-%     features_holdout2 = features_holdout2(:, nan_indices_test1);
-%     feature_column_names = feature_column_names(:, nan_indices_test1);
-%     nan_vector_test2 = features_holdout2(1, :);
-%     nan_indices_test2 = find(~isnan(nan_vector_test2));
-%     features_training = features_training(:, nan_indices_test2);
-%     features_holdout1 = features_holdout1(:, nan_indices_test2);
-%     features_holdout2 = features_holdout2(:, nan_indices_test2);
-%     feature_column_names = feature_column_names(:, nan_indices_test2);
-% end
 
 fprintf("Whitened the training and holdout testing datasets successfully! \n");
 
 %% Initialize classifier params for classifier
 saveParams = true;
 if(isequal(saveParams,true))
-    params.classifier='SVM';
-    params.fsname='mrmr';
+    if strcmp(scheme, 'wilcoxon_qda')
+        params.classifier='QDA';
+        params.fsname='wilcoxon';
+    elseif strcmp(scheme, 'wilcoxon_lda')
+        params.classifier='LDA';
+        params.fsname='wilcoxon';
+    elseif strcmp(scheme, 'wilcoxon_rf')
+        params.classifier='RANDOMFOREST';
+        params.fsname='wilcoxon';
+    elseif strcmp(scheme, 'mrmr_qda')
+        params.classifier='QDA';
+        params.fsname='mrmr';
+    elseif strcmp(scheme, 'mrmr_lda')
+        params.classifier='LDA';
+        params.fsname='mrmr';
+    elseif strcmp(scheme, 'mrmr_rf')
+        params.classifier='RANDOMFOREST';
+        params.fsname='mrmr';
+    end
     params.shuffle = 1;
-    params.n = 5;
+    params.n = 3;
     params.nIter = 50;
     params.num_top_feats = 5;
     %params.num_top_feats = length(features_training(1,:));

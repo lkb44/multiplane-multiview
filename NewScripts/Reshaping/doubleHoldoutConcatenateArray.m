@@ -1,16 +1,15 @@
 clear
 clc
 
-view = "Coronal";
-feature_family = "Texture";
-roi = "Tumor";
-cohort = "Testing2";
-split = "TRG_80_20_T_27_Split";
+view = "Axial";
+roi = "ProxFat10";
+cohort = "Training";
 
-root_path = "/Users/leobao/Documents/MultiPlanePipeline/Data/";
+root_path = "/Users/leobao/Documents/MultiPlanePipeline/AACR2023/";
 
-input_path = strcat(root_path, split, '/', cohort, '/', view, feature_family, 'Features/', roi, '/');
-output_path = strcat(root_path, split, '/', cohort, '/', view, feature_family, 'Features/', roi, '_', cohort, '.mat');
+input_path = strcat(root_path, cohort, 'TextureFeatures/Combined/', view, '/', roi, '/');
+
+output_path = strcat(root_path, cohort, 'TextureFeatures/', view, '_', roi, '_', cohort, '.mat');
 
 % Get a list of .mat files in the directory
 file_list = dir(fullfile(input_path, 'Patient-*.mat'));
