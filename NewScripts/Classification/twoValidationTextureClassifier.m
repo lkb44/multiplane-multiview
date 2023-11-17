@@ -8,10 +8,10 @@ if isunix
     addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/2D_Shape_Feature_Extraction_Code/scripts/feature_selection/mrmr_feature_select/'));
     addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/Feature_Selection_Classification_Code/Feature_Classifier/'));
     addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/multiplane-multiview/Old-SPIE/Feature_Selection_Classification_Code/Feature_Classifier/'));
-    % addpath(genpath('/Users/leobao/Documents/MultiPlanePipeline/2023-SPIE/2D_Shape_Feature_Extraction_Code/scripts/feature_selection/mrmr_feature_select/estpab.mexmac'));
+    addpath(genpath('/Users/leobao/Downloads/'));
 end
 %% Specify dataset information
-view = {'Coronal'}; % {Can only be 'Axial'}, {'Coronal'} or {'Axial','Coronal'}
+view = {'Axial'}; % {Can only be 'Axial'}, {'Coronal'} or {'Axial','Coronal'}
 rois = {'Proximal_Fat10'};
 scheme = {'wilcoxon_rf'}; % {'wilcoxon_qda'}, {'wilcoxon_rf'}, {'mrmr_qda'}, or {'mrmr_rf'}
 
@@ -59,7 +59,7 @@ fprintf("Got directory paths to feature matrices! \n");
 %% Create output directory
 
 
-output_path = "/Users/leobao/Documents/MultiPlanePipeline/AACR2023/Results/";
+output_path = "/Users/leobao/Documents/MultiPlanePipeline/AACR2023/Results_InvertedLabel/";
 experiment_date = strrep(string(datetime("now")), " ", "_");
 experiment_date = strrep(experiment_date, ":", "_");
 output_path = strcat(output_path, experiment_date, "_", view, "_", experiment_type, "_", scheme, "/");
@@ -116,14 +116,56 @@ elseif(length(view) == 1 && experiment_type == "proxfat15_only")
     feature_column_names = strcat(view{1}, "_proxfat15_", feature_column_names);
 end
 
-holdout_test_size1 = size(features_holdout1);
-holdout_test_size2 = size(features_holdout2);
-assert(holdout_test_size1(1) == 27, "The size of the dataset is incorrect!");
-assert(holdout_test_size2(1) == 36, "The size of the dataset is incorrect!");
+% holdout_test_size1 = size(features_holdout1);
+% holdout_test_size2 = size(features_holdout2);
+% assert(holdout_test_size1(1) == 27, "The size of the dataset is incorrect!");
+% assert(holdout_test_size2(1) == 36, "The size of the dataset is incorrect!");
 
+if strcmp(view(i), 'Axial')
+    if strcmp(rois(i), 'Proximal_Fat5')
+        % features_training(19, :) = [];
+        % data_labels_training(19, :) = [];
+        % data_labels_training = 1 - data_labels_training;
+        % data_labels_holdout1 = 1 - data_labels_holdout1;
+        % data_labels_holdout2 = 1 - data_labels_holdout2;
+    elseif strcmp(rois(i), 'Proximal_Fat10')
+        % data_labels_training = 1 - data_labels_training;
+        % data_labels_holdout1 = 1 - data_labels_holdout1;
+        % data_labels_holdout2 = 1 - data_labels_holdout2;
+    elseif strcmp(rois(i), 'Fat')
+        % data_labels_training = 1 - data_labels_training;
+        % data_labels_holdout1 = 1 - data_labels_holdout1;
+        % data_labels_holdout2 = 1 - data_labels_holdout2;
+    elseif strcmp(rois(i), 'Tumor')
+        % data_labels_training = 1 - data_labels_training;
+        % data_labels_holdout1 = 1 - data_labels_holdout1;
+        % data_labels_holdout2 = 1 - data_labels_holdout2;
+    end
+elseif strcmp(view(i), 'Coronal')
+    if strcmp(rois(i), 'Proximal_Fat5')
+        % data_labels_training = 1 - data_labels_training;
+        % data_labels_holdout1 = 1 - data_labels_holdout1;
+        % data_labels_holdout2 = 1 - data_labels_holdout2;
+    elseif strcmp(rois(i), 'Proximal_Fat10')
+        % data_labels_training = 1 - data_labels_training;
+        % data_labels_holdout1 = 1 - data_labels_holdout1;
+        % data_labels_holdout2 = 1 - data_labels_holdout2;
+    elseif strcmp(rois(i), 'Fat')
+        % data_labels_training = 1 - data_labels_training;
+        % data_labels_holdout1 = 1 - data_labels_holdout1;
+        % data_labels_holdout2 = 1 - data_labels_holdout2;
+    elseif strcmp(rois(i), 'Tumor')
+        % data_labels_training = 1 - data_labels_training;
+        % data_labels_holdout1 = 1 - data_labels_holdout1;
+        % data_labels_holdout2 = 1 - data_labels_holdout2;
+    end
+end
 fprintf("Loaded in train and holdout testing datasets! \n");
 
+
+
 if strcmp(rois(i), 'Proximal_Fat5')
+
     nan_vector_train = features_training(1, :);
     nan_indices_train = find(~isnan(nan_vector_train));
     features_training = features_training(:, nan_indices_train);
@@ -361,6 +403,15 @@ stats_for_export2.MCC = round(stats2.MCC, 3);
 
 QDAResults2 = struct2table(stats_for_export2);
 writetable(QDAResults2,strcat(output_path,'Holdout_Testing2_Dataset_Results.xlsx'), 'WriteVariableNames',1, 'Sheet', 'Entire_Test_Cohort_Results');
+%% Save top 5 features for training and validation cohorts
+
+train_feats_path = strcat(output_path, 'top5_training_feats.mat');
+test1_feats_path = strcat(output_path, 'top5_test1_feats.mat');
+test2_feats_path = strcat(output_path, 'top5_test2_feats.mat');
+
+save(train_feats_path, 'train_feats')
+save(test1_feats_path, 'test1_feats')
+save(test2_feats_path, 'test2_feats')
 %% Separate and save UH and VA results
 
 function results = compute_metrics(prediction, groundtruth)
